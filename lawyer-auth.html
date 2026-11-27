@@ -10,7 +10,7 @@ content="width=device-width, initial-scale=1">
 
 <title>ثبت‌نام و ورود وکلا</title>
 
-<link rel="stylesheet" href="css/style.css?v=8.0">
+<link rel="stylesheet" href="css/style.css?v=8.1">
 
 <style>
 
@@ -47,6 +47,7 @@ content="width=device-width, initial-scale=1">
 .checkItem input {
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
 }
 
 .progressTrack {
@@ -67,6 +68,33 @@ content="width=device-width, initial-scale=1">
 #progressText {
     text-align: center;
     margin: 12px 0;
+}
+
+.membershipForm {
+    background: #fff;
+    color: #222;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 18px;
+    line-height: 2;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.membershipForm h3 {
+    text-align: center;
+}
+
+.formVersion {
+    font-size: 12px;
+    color: #777;
+    text-align: center;
+}
+
+#membershipConfirmationStatus {
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
 }
 
 </style>
@@ -455,8 +483,7 @@ max="100000">
 <textarea id="resume"
 rows="5"
 maxlength="3000"
-placeholder="رزومه فرضی خود را وارد کنید">
-</textarea>
+placeholder="رزومه فرضی خود را وارد کنید"></textarea>
 
 </div>
 
@@ -647,6 +674,13 @@ onclick="nextLawyerStep(3)">
 
 <h3>مدارک تحصیلی کارشناسی ارشد و دکتری</h3>
 
+<p>
+
+در صورت اعلام مدرک کارشناسی ارشد
+یا دکتری، ارائه مدرک مربوط الزامی است.
+
+</p>
+
 <p id="degreeDocumentStatus">
 
 ثبت نشده
@@ -656,20 +690,6 @@ onclick="nextLawyerStep(3)">
 <button onclick="simulateDocument('degree')">
 
 ثبت مدرک آزمایشی
-
-</button>
-
-<h3>فرم تقاضای ثبت‌نام</h3>
-
-<p id="applicationDocumentStatus">
-
-ثبت نشده
-
-</p>
-
-<button onclick="simulateDocument('application')">
-
-ثبت فرم آزمایشی
 
 </button>
 
@@ -711,6 +731,14 @@ dir="ltr">
 
 </div>
 
+<div class="notice">
+
+فرم درخواست عضویت و همکاری در مرحله
+بعد به‌صورت خودکار توسط سامانه تولید
+خواهد شد و نیازی به بارگذاری آن نیست.
+
+</div>
+
 <button class="primary"
 onclick="nextLawyerStep(4)">
 
@@ -734,7 +762,7 @@ onclick="nextLawyerStep(4)">
 <p>
 
 پیش از ارسال درخواست، اطلاعات واردشده
-را بررسی کنید.
+و فرم درخواست عضویت را بررسی کنید.
 
 </p>
 
@@ -752,12 +780,71 @@ onclick="nextLawyerStep(4)">
 
 <div class="card">
 
+<h3>📄 فرم درخواست عضویت و همکاری</h3>
+
+<p>
+
+این فرم به‌صورت خودکار بر اساس اطلاعات
+اظهارشده توسط متقاضی تولید می‌شود.
+
+</p>
+
+<div id="membershipFormContent"
+class="membershipForm">
+
+فرم درخواست عضویت در این قسمت
+نمایش داده خواهد شد.
+
+</div>
+
+<p class="formVersion">
+
+نسخه آزمایشی فرم عضویت: ۱.۰
+
+</p>
+
+<button onclick="downloadMembershipForm()">
+
+📥 دریافت نسخه فرم درخواست عضویت
+
+</button>
+
+<label class="checkItem">
+
+<input type="checkbox"
+id="acceptMembershipForm"
+onchange="updateMembershipConfirmation()">
+
+فرم درخواست عضویت و همکاری را
+مطالعه کرده و مفاد آن را تأیید می‌کنم.
+
+</label>
+
+<p id="membershipConfirmationStatus">
+
+⚪ فرم هنوز تأیید نشده است.
+
+</p>
+
+<div class="notice">
+
+تأیید الکترونیکی در این نسخه صرفاً
+آزمایشی است و امضای الکترونیکی
+معتبر محسوب نمی‌شود.
+
+</div>
+
+</div>
+
+<div class="card">
+
 <label class="checkItem">
 
 <input type="checkbox"
 id="confirmInformation">
 
-اطلاعات واردشده را بررسی و تأیید می‌کنم.
+اطلاعات و مستندات ارائه‌شده را
+بررسی و تأیید می‌کنم.
 
 </label>
 
@@ -781,7 +868,7 @@ id="acceptLawyerRules">
 <button class="primary"
 onclick="submitLawyerApplication()">
 
-ارسال درخواست عضویت
+ارسال نهایی درخواست عضویت
 
 </button>
 
@@ -826,6 +913,17 @@ onclick="submitLawyerApplication()">
 ۶. مقررات حاضر موقت و آزمایشی هستند.
 </p>
 
+<p>
+۷. فرم درخواست عضویت به‌صورت خودکار
+توسط سامانه تولید می‌شود.
+</p>
+
+<p>
+۸. تأیید فرم درخواست عضویت در این نسخه
+صرفاً جنبه آزمایشی دارد و موجب ایجاد
+رابطه قراردادی واقعی نمی‌شود.
+</p>
+
 </div>
 
 <button onclick="returnFromLawyerRules()">
@@ -859,6 +957,12 @@ onclick="submitLawyerApplication()">
 یا صدور مجوز فعالیت نیست.
 
 </p>
+
+<button onclick="downloadSavedMembershipForm()">
+
+📄 دریافت فرم درخواست عضویت ثبت‌شده
+
+</button>
 
 <button onclick="checkApplication()">
 
@@ -1003,6 +1107,18 @@ class="card">
 
 </div>
 
+<div class="card">
+
+<h3>📁 اسناد عضویت</h3>
+
+<button onclick="downloadSavedMembershipForm()">
+
+📄 فرم درخواست عضویت و همکاری
+
+</button>
+
+</div>
+
 <button onclick="checkApplication()">
 
 📋 وضعیت احراز صلاحیت
@@ -1036,7 +1152,7 @@ onclick="logoutLawyer()">
 
 <br>
 
-نسخه آزمایشی V8.0
+نسخه آزمایشی V8.1
 
 </footer>
 
@@ -1044,11 +1160,11 @@ onclick="logoutLawyer()">
 
 <script src="js/lawyer-validation.js?v=8.0"></script>
 
-<script src="js/lawyer-documents.js?v=8.0"></script>
+<script src="js/lawyer-documents.js?v=8.1"></script>
 
 <script src="js/lawyer-verification.js?v=8.0"></script>
 
-<script src="js/lawyer-auth.js?v=8.0"></script>
+<script src="js/lawyer-auth.js?v=8.1"></script>
 
 </body>
 
