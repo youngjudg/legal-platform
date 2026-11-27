@@ -7,85 +7,96 @@
 
 <style>
 *{box-sizing:border-box}
-
 body{
 margin:0;
 font-family:Tahoma,sans-serif;
 background:#f4f6f9;
 color:#102a43;
 }
-
 header{
 background:#102a43;
 color:white;
 padding:30px 15px;
 text-align:center;
 }
-
 main{
-max-width:600px;
+max-width:650px;
 margin:auto;
 padding:20px;
 }
-
-button{
+button,select{
 display:block;
 width:100%;
-padding:18px;
-margin:12px 0;
+padding:15px;
+margin:10px 0;
 background:white;
 color:#102a43;
 border:1px solid #ddd;
 border-radius:12px;
 font-family:inherit;
-font-size:16px;
-cursor:pointer;
+font-size:15px;
 }
-
-button:hover{
-background:#e6eef5;
+button{cursor:pointer}
+button:hover{background:#e6eef5}
+h2{text-align:center;font-size:21px}
+.page{display:none}
+.active{display:block}
+.back{
+background:#102a43;
+color:white;
 }
-
-h2{
-text-align:center;
-font-size:21px;
-}
-
 .description{
 text-align:center;
 color:#62788a;
 line-height:1.9;
 }
-
-.page{
-display:none;
+.card,.summary,.filters{
+background:white;
+border:1px solid #ddd;
+border-radius:15px;
+padding:18px;
+margin:15px 0;
+line-height:2;
 }
-
-.active{
-display:block;
+.avatar{
+width:65px;
+height:65px;
+border-radius:50%;
+background:#e6eef5;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
 }
-
-.back{
+.blue{color:#1689ed}
+.online{color:green}
+.busy{color:#c87900}
+.offline{color:#777}
+.rating{color:#a66c00}
+.primary{
 background:#102a43;
 color:white;
 }
-
-.back:hover{
-background:#243f59;
+.badge{
+display:inline-block;
+background:#fff3cd;
+color:#795900;
+padding:3px 10px;
+border-radius:8px;
+font-size:12px;
 }
-
-.summary{
-background:white;
-padding:20px;
-border-radius:12px;
-line-height:2.2;
-border:1px solid #ddd;
+.notice{
+background:#fff3cd;
+padding:12px;
+border-radius:10px;
+font-size:13px;
+line-height:1.9;
 }
-
 footer{
 text-align:center;
 padding:20px;
 color:#777;
+font-size:12px;
 }
 </style>
 </head>
@@ -100,180 +111,399 @@ color:#777;
 <main>
 
 <section id="home" class="page active">
-
-<button onclick="showPage('topics')">
-مشاوره حقوقی آنلاین
-</button>
-
-<button>جستجو و انتخاب وکیل</button>
-<button>درخواست وکالت پرونده</button>
-<button>تنظیم دادخواست و شکواییه</button>
-<button>دستیار هوشمند حقوقی</button>
-<button>پیگیری پرونده</button>
-<button>ورود و ثبت‌نام کاربران</button>
-<button>پنل اختصاصی وکلا</button>
-
+<button onclick="showPage('topics')">مشاوره حقوقی آنلاین</button>
+<button onclick="showPage('topics')">جستجو و انتخاب وکیل</button>
+<button onclick="comingSoon()">درخواست وکالت پرونده</button>
+<button onclick="comingSoon()">تنظیم دادخواست و شکواییه</button>
+<button onclick="comingSoon()">دستیار هوشمند حقوقی</button>
+<button onclick="comingSoon()">پیگیری پرونده</button>
+<button onclick="comingSoon()">ورود و ثبت‌نام کاربران</button>
+<button onclick="comingSoon()">پنل اختصاصی وکلا</button>
 </section>
 
 <section id="topics" class="page">
-
-<h2>مشاوره حقوقی آنلاین</h2>
-
-<p class="description">
-موضوع مشاوره خود را انتخاب کنید.
-</p>
-
-<button onclick="selectTopic('حقوقی و مدنی')">
-حقوقی و مدنی
-</button>
-
-<button onclick="selectTopic('کیفری')">
-کیفری
-</button>
-
-<button onclick="selectTopic('خانواده')">
-خانواده
-</button>
-
-<button onclick="selectTopic('ملکی و ثبتی')">
-ملکی و ثبتی
-</button>
-
-<button onclick="selectTopic('قراردادها')">
-قراردادها
-</button>
-
-<button onclick="selectTopic('کار و تأمین اجتماعی')">
-کار و تأمین اجتماعی
-</button>
-
-<button onclick="selectTopic('تجاری و شرکت‌ها')">
-تجاری و شرکت‌ها
-</button>
-
-<button onclick="selectTopic('چک و سفته')">
-چک و سفته
-</button>
-
-<button onclick="selectTopic('اداری و شهرداری')">
-اداری و شهرداری
-</button>
-
-<button onclick="selectTopic('ارث و امور حسبی')">
-ارث و امور حسبی
-</button>
-
-<button onclick="selectTopic('بین‌المللی و مهاجرت')">
-بین‌المللی و مهاجرت
-</button>
-
-<button onclick="selectTopic('سایر موضوعات')">
-سایر موضوعات
-</button>
-
-<button class="back" onclick="showPage('home')">
-بازگشت به صفحه اصلی
-</button>
-
+<h2>انتخاب موضوع مشاوره</h2>
+<p class="description">موضوع حقوقی خود را انتخاب کنید.</p>
+<div id="topicList"></div>
+<button class="back" onclick="showPage('home')">بازگشت به صفحه اصلی</button>
 </section>
 
-<section id="consultationType" class="page">
-
+<section id="types" class="page">
 <h2>انتخاب نوع مشاوره</h2>
+<p class="description" id="topicText"></p>
 
-<p class="description" id="selectedTopic"></p>
+<button onclick="selectType('متنی')">💬 مشاوره متنی</button>
+<button onclick="selectType('صوتی')">📞 مشاوره صوتی</button>
+<button onclick="selectType('تصویری')">📹 مشاوره تصویری</button>
 
-<button onclick="selectType('متنی')">
-💬 مشاوره متنی
-</button>
-
-<button onclick="selectType('صوتی')">
-📞 مشاوره صوتی
-</button>
-
-<button onclick="selectType('تصویری')">
-📹 مشاوره تصویری
-</button>
-
-<button class="back" onclick="showPage('topics')">
-بازگشت
-</button>
-
+<button class="back" onclick="showPage('topics')">بازگشت</button>
 </section>
 
 <section id="lawyers" class="page">
 
 <h2>انتخاب وکیل</h2>
 
-<div class="summary">
-موضوع مشاوره:
-<strong id="finalTopic"></strong>
+<div class="summary" id="consultationSummary"></div>
 
-<br>
-
-نوع مشاوره:
-<strong id="finalType"></strong>
+<div class="notice">
+نسخه آزمایشی: تمام پروفایل‌ها، تعرفه‌ها و امتیازهای زیر فرضی هستند.
 </div>
 
-<p class="description">
-فهرست وکلای متخصص در نسخه بعدی
-به این قسمت اضافه خواهد شد.
-</p>
+<div class="filters">
 
-<button class="back" onclick="showPage('consultationType')">
-بازگشت
+<strong>مرتب‌سازی و فیلتر وکلا</strong>
+
+<select id="sort" onchange="renderLawyers()">
+<option value="rating">بالاترین امتیاز</option>
+<option value="cheap">کمترین هزینه</option>
+<option value="expensive">بیشترین هزینه</option>
+<option value="experience">بیشترین سابقه</option>
+</select>
+
+<select id="status" onchange="renderLawyers()">
+<option value="all">تمام وضعیت‌ها</option>
+<option value="online">آماده مشاوره</option>
+<option value="busy">در حال مشاوره</option>
+<option value="offline">آفلاین</option>
+</select>
+
+<select id="verified" onchange="renderLawyers()">
+<option value="all">تمام وکلا</option>
+<option value="yes">فقط وکلای ممتاز</option>
+</select>
+
+<select id="city" onchange="renderLawyers()">
+<option value="all">تمام شهرها</option>
+<option>تهران</option>
+<option>کرج</option>
+<option>شیراز</option>
+<option>مشهد</option>
+<option>اصفهان</option>
+</select>
+
+</div>
+
+<div id="lawyerList"></div>
+
+<button class="back" onclick="showPage('types')">بازگشت</button>
+
+</section>
+
+<section id="profile" class="page">
+<h2>رزومه کامل وکیل</h2>
+<div id="profileContent"></div>
+<button class="back" onclick="showPage('lawyers')">بازگشت به فهرست وکلا</button>
+</section>
+
+<section id="confirmation" class="page">
+<h2>خلاصه درخواست مشاوره</h2>
+<div id="requestSummary" class="summary"></div>
+
+<div class="notice">
+این درخواست آزمایشی است و هیچ پرداخت یا رزرو واقعی انجام نمی‌شود.
+</div>
+
+<button class="primary" onclick="alert('بخش پرداخت هنوز فعال نشده است.')">
+ادامه و پرداخت
 </button>
 
-<button onclick="showPage('home')">
-صفحه اصلی
-</button>
-
+<button onclick="showPage('lawyers')">تغییر وکیل</button>
+<button class="back" onclick="showPage('home')">صفحه اصلی</button>
 </section>
 
 </main>
 
 <footer>
 تمام حقوق محفوظ است.
+<br>
+نسخه آزمایشی V3.0
 </footer>
 
 <script>
 
-let topic = "";
-let consultationType = "";
+let topic="";
+let type="";
 
-function showPage(pageId){
+const topics=[
+"حقوقی و مدنی",
+"کیفری",
+"خانواده",
+"ملکی و ثبتی",
+"قراردادها",
+"کار و تأمین اجتماعی",
+"تجاری و شرکت‌ها",
+"چک و سفته",
+"اداری و شهرداری",
+"ارث و امور حسبی",
+"بین‌المللی و مهاجرت",
+"سایر موضوعات"
+];
 
-document.querySelectorAll('.page').forEach(function(page){
-page.classList.remove('active');
+const lawyers=[
+{
+id:1,name:"وکیل آزمایشی شماره ۱",
+city:"تهران",experience:12,
+degree:"دکتری حقوق",rating:4.9,
+cases:420,consultations:850,
+disciplinary:false,
+price:450000,status:"online",
+specialties:["کیفری","حقوقی و مدنی","چک و سفته"]
+},
+{
+id:2,name:"وکیل آزمایشی شماره ۲",
+city:"کرج",experience:8,
+degree:"کارشناسی ارشد حقوق",rating:4.8,
+cases:250,consultations:620,
+disciplinary:false,
+price:350000,status:"online",
+specialties:["خانواده","ارث و امور حسبی","حقوقی و مدنی"]
+},
+{
+id:3,name:"وکیل آزمایشی شماره ۳",
+city:"شیراز",experience:4,
+degree:"کارشناسی حقوق",rating:4.5,
+cases:90,consultations:180,
+disciplinary:false,
+price:220000,status:"offline",
+specialties:["ملکی و ثبتی","قراردادها","حقوقی و مدنی"]
+},
+{
+id:4,name:"وکیل آزمایشی شماره ۴",
+city:"مشهد",experience:15,
+degree:"دکتری حقوق",rating:4.9,
+cases:600,consultations:950,
+disciplinary:false,
+price:600000,status:"busy",
+specialties:["کیفری","اداری و شهرداری","کار و تأمین اجتماعی"]
+},
+{
+id:5,name:"وکیل آزمایشی شماره ۵",
+city:"اصفهان",experience:7,
+degree:"کارشناسی ارشد حقوق",rating:4.7,
+cases:190,consultations:410,
+disciplinary:false,
+price:300000,status:"online",
+specialties:["تجاری و شرکت‌ها","قراردادها","چک و سفته"]
+},
+{
+id:6,name:"وکیل آزمایشی شماره ۶",
+city:"تهران",experience:3,
+degree:"کارشناسی حقوق",rating:4.3,
+cases:60,consultations:120,
+disciplinary:false,
+price:180000,status:"offline",
+specialties:["بین‌المللی و مهاجرت","سایر موضوعات","خانواده"]
+}
+];
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.remove("active");
+});
+document.getElementById(id).classList.add("active");
+window.scrollTo(0,0);
+}
+
+function comingSoon(){
+alert("این بخش در نسخه‌های بعدی فعال خواهد شد.");
+}
+
+function isVerified(l){
+return l.experience>=5 &&
+l.degree!=="کارشناسی حقوق" &&
+l.cases>=150 &&
+!l.disciplinary;
+}
+
+function money(n){
+return n.toLocaleString("fa-IR")+" تومان";
+}
+
+function getPrice(l){
+if(type==="صوتی")return l.price+100000;
+if(type==="تصویری")return l.price+200000;
+return l.price;
+}
+
+function statusText(l){
+if(l.status==="online")
+return '<span class="online">● آماده مشاوره</span>';
+if(l.status==="busy")
+return '<span class="busy">● در حال مشاوره</span>';
+return '<span class="offline">● آفلاین ـ امکان رزرو</span>';
+}
+
+topics.forEach(t=>{
+let b=document.createElement("button");
+b.textContent=t;
+b.onclick=()=>selectTopic(t);
+document.getElementById("topicList").appendChild(b);
 });
 
-document.getElementById(pageId).classList.add('active');
+function selectTopic(t){
+topic=t;
+document.getElementById("topicText").textContent=
+"موضوع انتخاب‌شده: "+topic;
+showPage("types");
+}
 
-window.scrollTo(0,0);
+function selectType(t){
+type=t;
+document.getElementById("consultationSummary").textContent=
+"موضوع: "+topic+" | نوع مشاوره: "+type;
+renderLawyers();
+showPage("lawyers");
+}
+
+function renderLawyers(){
+
+let list=lawyers.filter(l=>l.specialties.includes(topic));
+
+let status=document.getElementById("status").value;
+let verified=document.getElementById("verified").value;
+let city=document.getElementById("city").value;
+let sort=document.getElementById("sort").value;
+
+if(status!=="all")
+list=list.filter(l=>l.status===status);
+
+if(verified==="yes")
+list=list.filter(isVerified);
+
+if(city!=="all")
+list=list.filter(l=>l.city===city);
+
+if(sort==="cheap")
+list.sort((a,b)=>getPrice(a)-getPrice(b));
+
+if(sort==="expensive")
+list.sort((a,b)=>getPrice(b)-getPrice(a));
+
+if(sort==="experience")
+list.sort((a,b)=>b.experience-a.experience);
+
+if(sort==="rating")
+list.sort((a,b)=>b.rating-a.rating);
+
+let html="";
+
+list.forEach(l=>{
+
+html+=`
+<div class="card">
+
+<div class="avatar">⚖</div>
+
+<h3>${l.name}
+${isVerified(l)?'<span class="blue">✔ ممتاز</span>':""}
+</h3>
+
+<span class="badge">پروفایل آزمایشی</span>
+
+<p>${statusText(l)}</p>
+
+📍 ${l.city}<br>
+
+سابقه وکالت: ${l.experience} سال<br>
+
+مدرک: ${l.degree}<br>
+
+تخصص: ${l.specialties.join("، ")}<br>
+
+<span class="rating">⭐ ${l.rating} از ۵</span><br>
+
+تعداد مشاوره: ${l.consultations}<br>
+
+مدت مشاوره: ۳۰ دقیقه<br>
+
+<strong>تعرفه: ${money(getPrice(l))}</strong>
+
+<button onclick="showProfile(${l.id})">
+مشاهده رزومه کامل
+</button>
+
+<button class="primary" onclick="chooseLawyer(${l.id})">
+انتخاب وکیل
+</button>
+
+</div>`;
+
+});
+
+document.getElementById("lawyerList").innerHTML=
+html||'<p class="description">وکیلی مطابق فیلترهای انتخابی یافت نشد.</p>';
 
 }
 
-function selectTopic(value){
+function showProfile(id){
 
-topic = value;
+let l=lawyers.find(x=>x.id===id);
 
-document.getElementById('selectedTopic').textContent =
-"موضوع انتخاب‌شده: " + topic;
+document.getElementById("profileContent").innerHTML=`
 
-showPage('consultationType');
+<div class="card">
+
+<div class="avatar">⚖</div>
+
+<h3>${l.name}</h3>
+
+<span class="badge">اطلاعات فرضی</span>
+
+<p>${statusText(l)}</p>
+
+شماره پروانه: آزمایشی-${l.id}<br>
+
+محل فعالیت: ${l.city}<br>
+
+مدرک تحصیلی: ${l.degree}<br>
+
+سابقه وکالت: ${l.experience} سال<br>
+
+تعداد پرونده‌ها: ${l.cases}<br>
+
+تعداد مشاوره‌ها: ${l.consultations}<br>
+
+سابقه محکومیت انتظامی: ندارد (فرضی)<br>
+
+حوزه تخصص: ${l.specialties.join("، ")}<br>
+
+امتیاز: ${l.rating} از ۵<br>
+
+وکیل ممتاز: ${isVerified(l)?"بله":"خیر"}<br>
+
+تعرفه مشاوره: ${money(getPrice(l))}
+
+<button class="primary" onclick="chooseLawyer(${l.id})">
+انتخاب این وکیل
+</button>
+
+</div>`;
+
+showPage("profile");
 
 }
 
-function selectType(value){
+function chooseLawyer(id){
 
-consultationType = value;
+let l=lawyers.find(x=>x.id===id);
 
-document.getElementById('finalTopic').textContent = topic;
+document.getElementById("requestSummary").innerHTML=`
 
-document.getElementById('finalType').textContent =
-consultationType;
+وکیل: <strong>${l.name}</strong><br>
 
-showPage('lawyers');
+موضوع مشاوره: ${topic}<br>
+
+نوع مشاوره: ${type}<br>
+
+مدت مشاوره: ۳۰ دقیقه<br>
+
+هزینه: <strong>${money(getPrice(l))}</strong><br>
+
+وضعیت: ${statusText(l)}
+
+`;
+
+showPage("confirmation");
 
 }
 
