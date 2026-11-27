@@ -10,7 +10,7 @@ content="width=device-width, initial-scale=1">
 
 <title>ثبت‌نام و ورود مشتریان</title>
 
-<link rel="stylesheet" href="css/style.css?v=7.0">
+<link rel="stylesheet" href="css/style.css?v=7.2">
 
 </head>
 
@@ -27,8 +27,10 @@ content="width=device-width, initial-scale=1">
 <main>
 
 <div class="notice">
+
 این محیط آزمایشی است.
 از نام و شماره همراه واقعی استفاده نکنید.
+
 </div>
 
 <section id="home" class="page active">
@@ -36,8 +38,10 @@ content="width=device-width, initial-scale=1">
 <h2>ورود یا ایجاد حساب کاربری</h2>
 
 <p class="description">
+
 برای استفاده از خدمات حقوقی،
 حساب کاربری خود را ایجاد کنید.
+
 </p>
 
 <button class="primary"
@@ -75,16 +79,20 @@ onclick="showPage('register')">
 <div class="card">
 
 <label for="fullName">
+
 نام و نام خانوادگی
+
 </label>
 
 <input type="text"
 id="fullName"
 maxlength="80"
-placeholder="نام و نام خانوادگی آزمایشی">
+placeholder="کاربر آزمایشی">
 
 <label for="registerPhone">
+
 شماره تلفن همراه
+
 </label>
 
 <input type="tel"
@@ -108,7 +116,8 @@ placeholder="09000000000">
 
 </button>
 
-<button class="primary" onclick="registerCustomer()">
+<button class="primary"
+onclick="registerCustomer()">
 
 دریافت رمز یک‌بارمصرف آزمایشی
 
@@ -132,7 +141,9 @@ placeholder="09000000000">
 <div class="card">
 
 <label for="loginPhone">
+
 شماره تلفن همراه
+
 </label>
 
 <input type="tel"
@@ -142,7 +153,8 @@ inputmode="numeric"
 dir="ltr"
 placeholder="09000000000">
 
-<button class="primary" onclick="loginCustomer()">
+<button class="primary"
+onclick="loginCustomer()">
 
 دریافت رمز یک‌بارمصرف آزمایشی
 
@@ -180,7 +192,9 @@ placeholder="09000000000">
 <div class="card">
 
 <label for="otpCode">
+
 رمز شش‌رقمی
+
 </label>
 
 <input type="text"
@@ -191,7 +205,8 @@ dir="ltr"
 autocomplete="off"
 placeholder="رمز یک‌بارمصرف">
 
-<button class="primary" onclick="verifyOTP()">
+<button class="primary"
+onclick="verifyOTP()">
 
 تأیید و ادامه
 
@@ -224,6 +239,12 @@ placeholder="رمز یک‌بارمصرف">
 
 </div>
 
+<div class="notice">
+
+اعتبار نشست آزمایشی: یک ساعت
+
+</div>
+
 <button onclick="editProfile()">
 
 ✏️ ویرایش اطلاعات کاربری
@@ -236,7 +257,8 @@ placeholder="رمز یک‌بارمصرف">
 
 </button>
 
-<button class="danger" onclick="logoutCustomer()">
+<button class="danger"
+onclick="logoutCustomer()">
 
 خروج از حساب کاربری
 
@@ -252,14 +274,17 @@ placeholder="رمز یک‌بارمصرف">
 <div class="card">
 
 <label for="editName">
+
 نام و نام خانوادگی
+
 </label>
 
 <input type="text"
 id="editName"
 maxlength="80">
 
-<button class="primary" onclick="saveProfile()">
+<button class="primary"
+onclick="saveProfile()">
 
 ذخیره تغییرات
 
@@ -299,7 +324,11 @@ maxlength="80">
 </p>
 
 <p>
-۵. این شرایط موقت بوده و جایگزین مقررات نهایی پلتفرم نیست.
+۵. اطلاعات آزمایشی در حافظه موقت مرورگر نگهداری می‌شوند.
+</p>
+
+<p>
+۶. این شرایط موقت بوده و جایگزین مقررات نهایی پلتفرم نیست.
 </p>
 
 </div>
@@ -324,13 +353,15 @@ maxlength="80">
 
 <br>
 
-نسخه آزمایشی V7.0
+نسخه آزمایشی V7.2
 
 </footer>
 
-<script src="js/common.js?v=7.0"></script>
+<script src="js/common.js?v=7.2"></script>
 
-<script src="js/customer-auth.js?v=7.0"></script>
+<script src="js/session.js?v=7.2"></script>
+
+<script src="js/customer-auth.js?v=7.2"></script>
 
 </body>
 
