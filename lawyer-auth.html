@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>ثبت‌نام و ورود وکلا</title>
+
+<link rel="stylesheet" href="css/style.css?v=8.0">
+
+<style>
+
+.formField {
+    margin: 15px 0;
+    text-align: right;
+}
+
+.formField label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.formField input,
+.formField select,
+.formField textarea {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.checkItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+    text-align: right;
+}
+
+.checkItem input {
+    width: 20px;
+    height: 20px;
+}
+
+.progressTrack {
+    width: 100%;
+    height: 12px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#progressBar {
+    width: 20%;
+    height: 100%;
+    background: #16865c;
+    transition: width 0.3s;
+}
+
+#progressText {
+    text-align: center;
+    margin: 12px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>⚖ پلتفرم خدمات حقوقی</h1>
+
+<p>ثبت‌نام و احراز صلاحیت وکلا</p>
+
+</header>
+
+<main>
+
+<div class="notice">
+
+نسخه آزمایشی؛ از اطلاعات هویتی، بانکی،
+شماره پروانه و مدارک واقعی استفاده نکنید.
+
+</div>
+
+
+<section id="home" class="page active">
+
+<h2>به سامانه اختصاصی وکلا خوش آمدید</h2>
+
+<p>
+برای عضویت در پلتفرم، مراحل ثبت‌نام و
+بررسی صلاحیت حرفه‌ای را طی کنید.
+</p>
+
+<button class="primary"
+onclick="startLawyerRegistration()">
+
+👤 ثبت‌نام وکیل جدید
+
+</button>
+
+<button onclick="showPage('login')">
+
+🔐 ورود به حساب کاربری
+
+</button>
+
+<button onclick="checkApplication()">
+
+📋 پیگیری وضعیت درخواست عضویت
+
+</button>
+
+<button onclick="goLawyer()">
+
+بازگشت به محیط اختصاصی وکلا
+
+</button>
+
+</section>
+
+
+<div id="registrationProgress" hidden>
+
+<p id="progressText">
+
+مرحله ۱ از ۵
+
+</p>
+
+<div class="progressTrack">
+
+<div id="progressBar"></div>
+
+</div>
+
+</div>
+
+
+<section id="step1" class="page">
+
+<h2>مرحله اول: اطلاعات هویتی</h2>
+
+<div class="card">
+
+<div class="formField">
+
+<label for="lawyerName">
+
+نام و نام خانوادگی
+
+</label>
+
+<input type="text"
+id="lawyerName"
+maxlength="80"
+placeholder="وکیل آزمایشی">
+
+</div>
+
+<div class="formField">
+
+<label for="nationalCode">
+
+کد ملی
+
+</label>
+
+<input type="text"
+id="nationalCode"
+maxlength="10"
+inputmode="numeric"
+dir="ltr"
+placeholder="0000000000">
+
+</div>
+
+<div class="formField">
+
+<label for="lawyerPhone">
+
+شماره تلفن همراه ثبت‌شده در مرجع صدور پروانه
+
+</label>
+
+<input type="tel"
+id="lawyerPhone"
+maxlength="11"
+inputmode="numeric"
+dir="ltr"
+placeholder="09000000000">
+
+</div>
+
+</div>
+
+<button class="primary"
+onclick="nextLawyerStep(1)">
+
+ادامه ـ اطلاعات حرفه‌ای
+
+</button>
+
+<button onclick="exitRegistration()">
+
+انصراف و بازگشت
+
+</button>
+
+</section>
+
+
+<section id="step2" class="page">
+
+<h2>مرحله دوم: اطلاعات حرفه‌ای</h2>
+
+<div class="card">
+
+<div class="formField">
+
+<label for="licenseNumber">
+
+شماره پروانه وکالت
+
+</label>
+
+<input type="text"
+id="licenseNumber"
+maxlength="30"
+placeholder="TEST-1001">
+
+</div>
+
+<div class="formField">
+
+<label for="licenseAuthority">
+
+مرجع صدور پروانه
+
+</label>
+
+<select id="licenseAuthority"
+onchange="updateLicenseAuthority()">
+
+<option value="">
+
+انتخاب مرجع صدور پروانه
+
+</option>
+
+<option value="bar">
+
+کانون وکلای دادگستری
+
+</option>
+
+<option value="judiciary">
+
+مرکز وکلا، کارشناسان رسمی و مشاوران خانواده قوه قضائیه
+
+</option>
+
+</select>
+
+</div>
+
+<div id="authorityBranchField"
+class="formField" hidden>
+
+<label id="authorityBranchLabel"
+for="authorityBranch">
+
+کانون یا واحد استانی
+
+</label>
+
+<select id="authorityBranch">
+
+<option value="">
+
+انتخاب کنید
+
+</option>
+
+</select>
+
+</div>
+
+<div class="formField">
+
+<label for="workProvince">
+
+استان محل فعالیت
+
+</label>
+
+<select id="workProvince">
+
+<option value="">
+
+انتخاب استان
+
+</option>
+
+</select>
+
+</div>
+
+<div class="formField">
+
+<label for="workCity">
+
+شهر محل فعالیت
+
+</label>
+
+<input type="text"
+id="workCity"
+maxlength="60"
+placeholder="شهر محل فعالیت">
+
+</div>
+
+<div class="formField">
+
+<label for="experience">
+
+سابقه وکالت به سال
+
+</label>
+
+<input type="number"
+id="experience"
+min="0"
+max="70">
+
+</div>
+
+<div class="formField">
+
+<label for="degree">
+
+بالاترین مدرک تحصیلی
+
+</label>
+
+<select id="degree">
+
+<option value="">انتخاب مدرک</option>
+
+<option value="bachelor">کارشناسی</option>
+
+<option value="master">کارشناسی ارشد</option>
+
+<option value="doctorate">دکتری</option>
+
+</select>
+
+</div>
+
+<div class="formField">
+
+<label for="university">
+
+دانشگاه محل تحصیل
+
+</label>
+
+<input type="text"
+id="university"
+maxlength="100"
+placeholder="دانشگاه آزمایشی">
+
+</div>
+
+<div class="formField">
+
+<label for="studyField">
+
+رشته و گرایش تحصیلی
+
+</label>
+
+<input type="text"
+id="studyField"
+maxlength="100">
+
+</div>
+
+<div class="formField">
+
+<label for="caseCount">
+
+تعداد پرونده‌های دارای سابقه وکالت
+
+</label>
+
+<input type="number"
+id="caseCount"
+min="0"
+max="100000">
+
+</div>
+
+<div class="formField">
+
+<label for="disciplinaryHistory">
+
+سابقه محکومیت انتظامی
+
+</label>
+
+<select id="disciplinaryHistory">
+
+<option value="">انتخاب کنید</option>
+
+<option value="no">ندارم</option>
+
+<option value="yes">دارم</option>
+
+</select>
+
+</div>
+
+<div class="formField">
+
+<label>
+
+حوزه‌های تخصصی
+
+</label>
+
+<div id="specialtyList"></div>
+
+</div>
+
+<div class="formField">
+
+<label for="resume">
+
+رزومه کاری
+
+</label>
+
+<textarea id="resume"
+rows="5"
+maxlength="3000"
+placeholder="رزومه فرضی خود را وارد کنید">
+</textarea>
+
+</div>
+
+<div class="formField">
+
+<label for="activityArea">
+
+محدوده جغرافیایی فعالیت
+
+</label>
+
+<select id="activityArea">
+
+<option value="">انتخاب محدوده</option>
+
+<option value="license">
+
+حوزه جغرافیایی پروانه وکالت
+
+</option>
+
+<option value="province">
+
+سطح استان
+
+</option>
+
+<option value="country">
+
+سراسر کشور
+
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button class="primary"
+onclick="nextLawyerStep(2)">
+
+ادامه ـ انتخاب خدمات
+
+</button>
+
+<button onclick="previousLawyerStep(2)">
+
+بازگشت به مرحله قبل
+
+</button>
+
+</section>
+
+
+<section id="step3" class="page">
+
+<h2>مرحله سوم: خدمات قابل ارائه</h2>
+
+<div class="card">
+
+<p>
+
+خدماتی را که قصد ارائه آنها را دارید،
+انتخاب کنید.
+
+</p>
+
+<label class="checkItem">
+
+<input type="checkbox"
+name="lawyerService"
+value="representation">
+
+قبول وکالت پرونده
+
+</label>
+
+<label class="checkItem">
+
+<input type="checkbox"
+name="lawyerService"
+value="consultation">
+
+مشاوره حقوقی
+
+</label>
+
+<label class="checkItem">
+
+<input type="checkbox"
+name="lawyerService"
+value="petition">
+
+تنظیم دادخواست
+
+</label>
+
+<label class="checkItem">
+
+<input type="checkbox"
+name="lawyerService"
+value="complaint">
+
+تنظیم شکوائیه
+
+</label>
+
+<label class="checkItem">
+
+<input type="checkbox"
+name="lawyerService"
+value="brief">
+
+تنظیم لایحه
+
+</label>
+
+<label class="checkItem">
+
+<input type="checkbox"
+name="lawyerService"
+value="notice">
+
+تنظیم اظهارنامه
+
+</label>
+
+</div>
+
+<button class="primary"
+onclick="nextLawyerStep(3)">
+
+ادامه ـ مدارک و مستندات
+
+</button>
+
+<button onclick="previousLawyerStep(3)">
+
+بازگشت به مرحله قبل
+
+</button>
+
+</section>
+
+
+<section id="step4" class="page">
+
+<h2>مرحله چهارم: مدارک و مستندات</h2>
+
+<div class="notice">
+
+در این نسخه، بارگذاری مدارک صرفاً
+شبیه‌سازی می‌شود و هیچ فایل واقعی
+دریافت یا ارسال نخواهد شد.
+
+</div>
+
+<div class="card">
+
+<h3>تصویر پروانه معتبر وکالت</h3>
+
+<p id="licenseDocumentStatus">
+
+ثبت نشده
+
+</p>
+
+<button onclick="simulateDocument('license')">
+
+ثبت مدرک آزمایشی
+
+</button>
+
+<h3>تصویر کارت ملی</h3>
+
+<p id="identityDocumentStatus">
+
+ثبت نشده
+
+</p>
+
+<button onclick="simulateDocument('identity')">
+
+ثبت مدرک آزمایشی
+
+</button>
+
+<h3>مدارک تحصیلی کارشناسی ارشد و دکتری</h3>
+
+<p id="degreeDocumentStatus">
+
+ثبت نشده
+
+</p>
+
+<button onclick="simulateDocument('degree')">
+
+ثبت مدرک آزمایشی
+
+</button>
+
+<h3>فرم تقاضای ثبت‌نام</h3>
+
+<p id="applicationDocumentStatus">
+
+ثبت نشده
+
+</p>
+
+<button onclick="simulateDocument('application')">
+
+ثبت فرم آزمایشی
+
+</button>
+
+<h3>تقاضای تصویری ثبت‌نام</h3>
+
+<p id="videoDocumentStatus">
+
+ثبت نشده
+
+</p>
+
+<button onclick="simulateDocument('video')">
+
+ثبت تقاضای تصویری آزمایشی
+
+</button>
+
+<div class="formField">
+
+<label for="iban">
+
+شماره شبای بانکی
+
+</label>
+
+<input type="text"
+id="iban"
+value="IR000000000000000000000000"
+readonly
+dir="ltr">
+
+<p>
+
+شماره فوق فرضی و غیرقابل استفاده بانکی است.
+
+</p>
+
+</div>
+
+</div>
+
+<button class="primary"
+onclick="nextLawyerStep(4)">
+
+ادامه ـ بررسی نهایی
+
+</button>
+
+<button onclick="previousLawyerStep(4)">
+
+بازگشت به مرحله قبل
+
+</button>
+
+</section>
+
+
+<section id="step5" class="page">
+
+<h2>مرحله پنجم: بررسی نهایی درخواست</h2>
+
+<p>
+
+پیش از ارسال درخواست، اطلاعات واردشده
+را بررسی کنید.
+
+</p>
+
+<div id="registrationSummary" class="card">
+
+خلاصه اطلاعات ثبت‌نام
+
+</div>
+
+<div id="blueTickPreview" class="card">
+
+بررسی اولیه شرایط دریافت تیک آبی
+
+</div>
+
+<div class="card">
+
+<label class="checkItem">
+
+<input type="checkbox"
+id="confirmInformation">
+
+اطلاعات واردشده را بررسی و تأیید می‌کنم.
+
+</label>
+
+<label class="checkItem">
+
+<input type="checkbox"
+id="acceptLawyerRules">
+
+شرایط و مقررات آزمایشی پلتفرم را می‌پذیرم.
+
+</label>
+
+<button onclick="showLawyerRules()">
+
+مطالعه شرایط و مقررات
+
+</button>
+
+</div>
+
+<button class="primary"
+onclick="submitLawyerApplication()">
+
+ارسال درخواست عضویت
+
+</button>
+
+<button onclick="previousLawyerStep(5)">
+
+بازگشت به مرحله قبل
+
+</button>
+
+</section>
+
+
+<section id="rules" class="page">
+
+<h2>شرایط ثبت‌نام آزمایشی وکلا</h2>
+
+<div class="card">
+
+<p>
+۱. این سامانه در مرحله توسعه و آزمایش است.
+</p>
+
+<p>
+۲. ورود اطلاعات و مدارک واقعی ممنوع است.
+</p>
+
+<p>
+۳. ثبت درخواست به معنای تأیید صلاحیت حرفه‌ای نیست.
+</p>
+
+<p>
+۴. تأیید صلاحیت و اعطای تیک آبی
+دو فرایند مستقل هستند.
+</p>
+
+<p>
+۵. هیچ خدمت حقوقی یا تراکنش مالی واقعی
+در این نسخه انجام نمی‌شود.
+</p>
+
+<p>
+۶. مقررات حاضر موقت و آزمایشی هستند.
+</p>
+
+</div>
+
+<button onclick="returnFromLawyerRules()">
+
+بازگشت به بررسی نهایی
+
+</button>
+
+</section>
+
+
+<section id="submitted" class="page">
+
+<h2>✅ درخواست عضویت ثبت شد</h2>
+
+<div id="applicationReceipt" class="card">
+
+رسید آزمایشی ثبت درخواست
+
+</div>
+
+<div class="notice">
+
+🟡 وضعیت: در انتظار بررسی
+
+</div>
+
+<p>
+
+ثبت درخواست به معنای تأیید صلاحیت
+یا صدور مجوز فعالیت نیست.
+
+</p>
+
+<button onclick="checkApplication()">
+
+پیگیری وضعیت درخواست
+
+</button>
+
+<button onclick="goLawyer()">
+
+بازگشت به محیط وکلا
+
+</button>
+
+</section>
+
+
+<section id="applicationStatus" class="page">
+
+<h2>پیگیری وضعیت درخواست عضویت</h2>
+
+<div id="applicationStatusContent"
+class="card">
+
+وضعیت درخواست
+
+</div>
+
+<button onclick="goLawyerAuthHome()">
+
+بازگشت
+
+</button>
+
+</section>
+
+
+<section id="login" class="page">
+
+<h2>ورود وکلا به حساب کاربری</h2>
+
+<div class="card">
+
+<div class="formField">
+
+<label for="lawyerLoginPhone">
+
+شماره تلفن همراه ثبت‌شده در مرجع صدور پروانه
+
+</label>
+
+<input type="tel"
+id="lawyerLoginPhone"
+maxlength="11"
+inputmode="numeric"
+dir="ltr"
+placeholder="09000000000">
+
+</div>
+
+<button class="primary"
+onclick="loginLawyer()">
+
+دریافت رمز یک‌بارمصرف آزمایشی
+
+</button>
+
+</div>
+
+<button onclick="goLawyerAuthHome()">
+
+بازگشت
+
+</button>
+
+</section>
+
+
+<section id="lawyerOTP" class="page">
+
+<h2>تأیید شماره تلفن همراه</h2>
+
+<div class="notice">
+
+رمز آزمایشی: 123456
+
+<br>
+
+هیچ پیامک واقعی ارسال نمی‌شود.
+
+</div>
+
+<div class="card">
+
+<div class="formField">
+
+<label for="lawyerOTPCode">
+
+رمز یک‌بارمصرف
+
+</label>
+
+<input type="text"
+id="lawyerOTPCode"
+maxlength="6"
+inputmode="numeric"
+dir="ltr">
+
+</div>
+
+<button class="primary"
+onclick="verifyLawyerOTP()">
+
+تأیید و ورود
+
+</button>
+
+<button onclick="resendLawyerOTP()">
+
+دریافت مجدد رمز آزمایشی
+
+</button>
+
+</div>
+
+<button onclick="goLawyerAuthHome()">
+
+انصراف
+
+</button>
+
+</section>
+
+
+<section id="lawyerProfile" class="page">
+
+<h2>حساب کاربری وکیل</h2>
+
+<div id="lawyerProfileContent"
+class="card">
+
+اطلاعات حساب کاربری
+
+</div>
+
+<button onclick="checkApplication()">
+
+📋 وضعیت احراز صلاحیت
+
+</button>
+
+<button onclick="goLawyer()">
+
+ورود به محیط اختصاصی وکلا
+
+</button>
+
+<button class="danger"
+onclick="logoutLawyer()">
+
+خروج از حساب کاربری
+
+</button>
+
+</section>
+
+</main>
+
+<footer>
+
+پلتفرم خدمات حقوقی
+
+<br>
+
+ماژول ثبت‌نام و احراز صلاحیت وکلا
+
+<br>
+
+نسخه آزمایشی V8.0
+
+</footer>
+
+<script src="js/common.js?v=8.0"></script>
+
+<script src="js/lawyer-validation.js?v=8.0"></script>
+
+<script src="js/lawyer-documents.js?v=8.0"></script>
+
+<script src="js/lawyer-verification.js?v=8.0"></script>
+
+<script src="js/lawyer-auth.js?v=8.0"></script>
+
+</body>
+
+</html>
