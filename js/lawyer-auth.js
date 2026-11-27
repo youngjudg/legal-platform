@@ -1,5 +1,5 @@
 // ماژول اصلی ثبت‌نام و ورود وکلا
-// Version 8.0
+// Version 8.1
 
 const LAWYER_APPLICATION_KEY =
     "legal_platform_demo_lawyer_application";
@@ -9,33 +9,33 @@ const LAWYER_SESSION_KEY =
 
 const LAWYER_DEMO_OTP = "123456";
 
+const MEMBERSHIP_FORM_VERSION = "1.0";
+
 let currentLawyerStep = 1;
 let lawyerApplication = null;
 let lawyerOTPExpiresAt = 0;
 let lawyerOTPAttempts = 0;
 
+let membershipForm = null;
+let membershipConfirmation = null;
+
+
 const LAWYER_SERVICE_TITLES = {
 
     representation: "قبول وکالت پرونده",
-
     consultation: "مشاوره حقوقی",
-
     petition: "تنظیم دادخواست",
-
     complaint: "تنظیم شکوائیه",
-
     brief: "تنظیم لایحه",
-
     notice: "تنظیم اظهارنامه"
 
 };
 
+
 const LAWYER_AREA_TITLES = {
 
     license: "حوزه جغرافیایی پروانه وکالت",
-
     province: "سطح استان",
-
     country: "سراسر کشور"
 
 };
@@ -50,16 +50,17 @@ function showLawyerPage(id) {
             "registrationProgress"
         );
 
-    progress.hidden = !/^step[1-5]$/.test(id);
+    progress.hidden =
+        !/^step[1-5]$/.test(id);
 
     showPage(id);
 
 }
 
+
 function goLawyerAuthHome() {
 
     lawyerOTPExpiresAt = 0;
-
     lawyerOTPAttempts = 0;
 
     showLawyerPage("home");
@@ -67,11 +68,12 @@ function goLawyerAuthHome() {
 }
 
 
-// مدیریت مراحل ثبت‌نام
+// شروع ثبت‌نام
 
 function startLawyerRegistration() {
 
-    lawyerApplication = getSavedLawyerApplication();
+    lawyerApplication =
+        getSavedLawyerApplication();
 
     if (lawyerApplication) {
 
@@ -89,6 +91,9 @@ function startLawyerRegistration() {
 
 }
 
+
+// مدیریت مراحل ثبت‌نام
+
 function showLawyerStep(step) {
 
     if (step < 1 || step > 5) return;
@@ -100,9 +105,7 @@ function showLawyerStep(step) {
     ).textContent =
 
         "مرحله " +
-
         step.toLocaleString("fa-IR") +
-
         " از ۵";
 
     document.getElementById(
@@ -119,9 +122,12 @@ function showLawyerStep(step) {
 
         renderBlueTickPreview();
 
+        renderMembershipForm();
+
     }
 
 }
+
 
 function nextLawyerStep(step) {
 
@@ -130,11 +136,8 @@ function nextLawyerStep(step) {
     const validators = {
 
         1: validateLawyerStep1,
-
         2: validateLawyerStep2,
-
         3: validateLawyerStep3,
-
         4: validateLawyerStep4
 
     };
@@ -147,11 +150,13 @@ function nextLawyerStep(step) {
 
 }
 
+
 function previousLawyerStep(step) {
 
     showLawyerStep(step - 1);
 
 }
+
 
 function exitRegistration() {
 
@@ -165,14 +170,13 @@ function exitRegistration() {
 
 }
 
+
 function resetLawyerRegistration() {
 
     document.querySelectorAll(
 
         'section[id^="step"] input,' +
-
         'section[id^="step"] select,' +
-
         'section[id^="step"] textarea'
 
     ).forEach(element => {
@@ -190,6 +194,9 @@ function resetLawyerRegistration() {
         }
 
     });
+
+    membershipForm = null;
+    membershipConfirmation = null;
 
     resetLawyerDocuments();
 
@@ -274,7 +281,7 @@ function collectLawyerData() {
 }
 
 
-// نمایش اطلاعات به شکل امن
+// نمایش امن اطلاعات
 
 function appendLawyerDetail(
     container,
@@ -284,16 +291,14 @@ function appendLawyerDetail(
 
     const row = document.createElement("p");
 
-    row.textContent =
-
-        title + ": " + value;
+    row.textContent = title + ": " + value;
 
     container.appendChild(row);
 
 }
 
 
-// پیش‌نمایش ثبت‌نام
+// نمایش خلاصه ثبت‌نام
 
 function renderLawyerRegistrationSummary() {
 
@@ -353,10 +358,8 @@ function renderLawyerRegistrationSummary() {
         ["خدمات قابل ارائه",
 
             data.services.map(
-
                 service =>
                     LAWYER_SERVICE_TITLES[service]
-
             ).join("، ")],
 
         ["رزومه کاری", data.resume],
@@ -374,19 +377,12 @@ function renderLawyerRegistrationSummary() {
     details.forEach(item => {
 
         appendLawyerDetail(
-
             container,
-
             item[0],
-
             item[1]
-
         );
 
     });
-
-    const progress =
-        getLawyerDocumentProgress();
 
     appendLawyerDetail(
 
@@ -394,20 +390,461 @@ function renderLawyerRegistrationSummary() {
 
         "تکمیل مدارک الزامی",
 
-        progress.percent + "%"
+        getLawyerDocumentProgress().percent + "%"
 
     );
 
 }
 
 
-// مدیریت شرایط و مقررات
+// تولید شماره اختصاصی فرم
+
+function generateMembershipFormId() {
+
+    return "MF-TEST-" +
+
+        Date.now()
+        .toString(36)
+        .toUpperCase() +
+
+        "-" +
+
+        Math.random()
+        .toString(36)
+        .substring(2, 8)
+        .toUpperCase();
+
+}
+
+
+// تولید خودکار فرم درخواست عضویت
+
+function createMembershipForm(data) {
+
+    const services = data.services.map(
+
+        service =>
+            LAWYER_SERVICE_TITLES[service]
+
+    ).join("، ");
+
+    const formId =
+        generateMembershipFormId();
+
+    const createdAt =
+        new Date().toISOString();
+
+    const paragraphs = [
+
+        "مدیریت محترم پلتفرم خدمات حقوقی",
+
+        "با سلام و احترام",
+
+        "اینجانب " + data.name +
+        " با کد ملی فرضی " +
+        data.nationalCode +
+        " و شماره پروانه آزمایشی " +
+        data.licenseNumber +
+        "، تقاضای عضویت و همکاری با پلتفرم خدمات حقوقی را دارم.",
+
+        "مرجع صدور پروانه: " +
+        LAWYER_AUTHORITIES[
+            data.licenseAuthority
+        ],
+
+        "کانون یا واحد مربوط: " +
+        data.authorityBranch,
+
+        "شماره تلفن همراه فرضی: " +
+        data.phone,
+
+        "محل فعالیت: " +
+        data.workProvince +
+        " ـ " +
+        data.workCity,
+
+        "خدمات مورد تقاضا: " +
+        services,
+
+        "محدوده جغرافیایی فعالیت: " +
+        LAWYER_AREA_TITLES[
+            data.activityArea
+        ],
+
+        "اینجانب در چارچوب این نمونه آزمایشی، مفاد زیر را مطالعه و تأیید می‌کنم:",
+
+        "۱. اطلاعات و مستندات ارائه‌شده در فرایند ثبت‌نام باید صحیح و معتبر باشند.",
+
+        "۲. برخورداری از پروانه معتبر وکالت و رعایت مقررات حرفه‌ای از شرایط همکاری در نسخه عملیاتی خواهد بود.",
+
+        "۳. بررسی و استعلام صلاحیت حرفه‌ای از مرجع صدور پروانه، تابع ضوابط قانونی و مجوزهای لازم خواهد بود.",
+
+        "۴. حفظ محرمانگی اطلاعات و مستندات کاربران و رعایت حقوق آنان ضروری است.",
+
+        "۵. رعایت قوانین و مقررات حاکم بر فعالیت حرفه‌ای و ضوابط معتبر پلتفرم الزامی خواهد بود.",
+
+        "۶. تغییر در وضعیت پروانه وکالت یا صلاحیت حرفه‌ای باید مطابق ضوابط به مدیریت پلتفرم اعلام شود.",
+
+        "۷. ثبت درخواست عضویت به معنای پذیرش نهایی، تأیید صلاحیت یا اعطای تیک آبی نیست.",
+
+        "۸. آغاز همکاری واقعی منوط به احراز شرایط قانونی و پذیرش نهایی درخواست خواهد بود.",
+
+        "۹. این فرم صرفاً آزمایشی است و تأیید آن موجب ایجاد رابطه قراردادی واقعی نمی‌شود.",
+
+        "نام متقاضی: " + data.name,
+
+        "شماره اختصاصی فرم: " + formId,
+
+        "نسخه فرم: " + MEMBERSHIP_FORM_VERSION,
+
+        "تاریخ تولید فرم: " +
+        new Date(createdAt)
+        .toLocaleString("fa-IR")
+
+    ];
+
+    return {
+
+        id: formId,
+
+        version: MEMBERSHIP_FORM_VERSION,
+
+        createdAt: createdAt,
+
+        title: "فرم درخواست عضویت و همکاری",
+
+        paragraphs: paragraphs,
+
+        dataSnapshot: JSON.stringify(data),
+
+        demo: true
+
+    };
+
+}
+
+
+// نمایش فرم عضویت
+
+function renderMembershipForm() {
+
+    const data = collectLawyerData();
+
+    const snapshot = JSON.stringify(data);
+
+    if (
+
+        !membershipForm ||
+
+        membershipForm.dataSnapshot !== snapshot
+
+    ) {
+
+        membershipForm =
+            createMembershipForm(data);
+
+        invalidateMembershipConfirmation();
+
+    }
+
+    const container =
+        document.getElementById(
+            "membershipFormContent"
+        );
+
+    container.textContent = "";
+
+    const title = document.createElement("h3");
+
+    title.textContent = membershipForm.title;
+
+    container.appendChild(title);
+
+    membershipForm.paragraphs.forEach(
+
+        paragraph => {
+
+            const row =
+                document.createElement("p");
+
+            row.textContent = paragraph;
+
+            container.appendChild(row);
+
+        }
+
+    );
+
+}
+
+
+// تأیید الکترونیکی آزمایشی فرم
+
+function updateMembershipConfirmation() {
+
+    const checkbox =
+        document.getElementById(
+            "acceptMembershipForm"
+        );
+
+    const status =
+        document.getElementById(
+            "membershipConfirmationStatus"
+        );
+
+    if (!checkbox || !status) return;
+
+    if (!checkbox.checked || !membershipForm) {
+
+        membershipConfirmation = null;
+
+        checkbox.checked = false;
+
+        status.textContent =
+            "⚪ فرم هنوز تأیید نشده است.";
+
+        status.style.color = "";
+
+        return;
+
+    }
+
+    if (
+
+        membershipForm.dataSnapshot !==
+
+        JSON.stringify(collectLawyerData())
+
+    ) {
+
+        checkbox.checked = false;
+
+        membershipConfirmation = null;
+
+        renderMembershipForm();
+
+        return;
+
+    }
+
+    membershipConfirmation = {
+
+        formId: membershipForm.id,
+
+        formVersion: membershipForm.version,
+
+        confirmedAt: new Date().toISOString(),
+
+        method: "demo-checkbox",
+
+        confirmed: true,
+
+        demo: true
+
+    };
+
+    status.textContent =
+
+        "✅ فرم به‌صورت آزمایشی تأیید شد.";
+
+    status.style.color = "#16865c";
+
+}
+
+
+// اعتبارسنجی تأیید فرم
+
+function validateMembershipConfirmation() {
+
+    if (
+
+        !membershipForm ||
+
+        !membershipConfirmation ||
+
+        !document.getElementById(
+            "acceptMembershipForm"
+        ).checked ||
+
+        membershipConfirmation.confirmed !== true ||
+
+        membershipConfirmation.formId !==
+            membershipForm.id ||
+
+        membershipConfirmation.formVersion !==
+            membershipForm.version ||
+
+        membershipForm.dataSnapshot !==
+            JSON.stringify(collectLawyerData())
+
+    ) {
+
+        alert(
+
+            "لطفاً فرم درخواست عضویت را مطالعه و تأیید کنید."
+
+        );
+
+        renderMembershipForm();
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
+
+// دریافت نسخه متنی فرم
+
+function exportMembershipForm(
+    form,
+    confirmation
+) {
+
+    if (!form || !Array.isArray(form.paragraphs)) {
+
+        alert("فرم درخواست عضویت موجود نیست.");
+
+        return;
+
+    }
+
+    const lines = [
+
+        form.title,
+
+        "نسخه آزمایشی ـ فاقد اعتبار قراردادی",
+
+        "",
+
+        ...form.paragraphs,
+
+        ""
+
+    ];
+
+    if (confirmation &&
+        confirmation.confirmed === true) {
+
+        lines.push(
+
+            "وضعیت: تأیید آزمایشی شده",
+
+            "تاریخ تأیید: " +
+
+            new Date(
+                confirmation.confirmedAt
+            ).toLocaleString("fa-IR"),
+
+            "روش تأیید: انتخاب گزینه تأیید آزمایشی"
+
+        );
+
+    } else {
+
+        lines.push(
+
+            "وضعیت: پیش‌نویس تأییدنشده"
+
+        );
+
+    }
+
+    lines.push(
+
+        "",
+
+        "این سند امضای الکترونیکی معتبر ندارد."
+
+    );
+
+    const blob = new Blob(
+
+        ["\uFEFF" + lines.join("\n\n")],
+
+        {type: "text/plain;charset=utf-8"}
+
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download = form.id + ".txt";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(
+
+        () => URL.revokeObjectURL(url),
+
+        3000
+
+    );
+
+}
+
+
+function downloadMembershipForm() {
+
+    renderMembershipForm();
+
+    exportMembershipForm(
+
+        membershipForm,
+
+        membershipConfirmation
+
+    );
+
+}
+
+
+function downloadSavedMembershipForm() {
+
+    const application =
+        getSavedLawyerApplication();
+
+    if (!application ||
+        !application.membershipForm) {
+
+        alert(
+
+            "فرم عضویت ثبت‌شده در این نسخه موجود نیست."
+
+        );
+
+        return;
+
+    }
+
+    exportMembershipForm(
+
+        application.membershipForm,
+
+        application.membershipConfirmation
+
+    );
+
+}
+
+
+// شرایط و مقررات
 
 function showLawyerRules() {
 
     showLawyerPage("rules");
 
 }
+
 
 function returnFromLawyerRules() {
 
@@ -420,13 +857,26 @@ function returnFromLawyerRules() {
 
 function saveLawyerApplication(application) {
 
-    if (!application ||
+    if (
+
+        !application ||
+
         application.demo !== true ||
+
         application.phone !== "09000000000" ||
+
         application.nationalCode !== "0000000000" ||
+
         !/^TEST-[0-9]{1,10}$/i.test(
             application.licenseNumber
-        )) {
+        ) ||
+
+        !application.membershipConfirmation ||
+
+        application.membershipConfirmation
+            .confirmed !== true
+
+    ) {
 
         return false;
 
@@ -452,6 +902,7 @@ function saveLawyerApplication(application) {
 
 }
 
+
 function getSavedLawyerApplication() {
 
     try {
@@ -466,9 +917,15 @@ function getSavedLawyerApplication() {
 
         const application = JSON.parse(saved);
 
-        if (application.demo !== true ||
+        if (
+
+            application.demo !== true ||
+
             application.phone !== "09000000000" ||
-            application.nationalCode !== "0000000000") {
+
+            application.nationalCode !== "0000000000"
+
+        ) {
 
             return null;
 
@@ -485,14 +942,16 @@ function getSavedLawyerApplication() {
 }
 
 
-// ارسال درخواست عضویت
+// ارسال نهایی درخواست عضویت
 
 function submitLawyerApplication() {
 
     if (getSavedLawyerApplication()) {
 
         alert(
+
             "درخواست آزمایشی قبلاً ثبت شده است."
+
         );
 
         checkApplication();
@@ -504,13 +963,9 @@ function submitLawyerApplication() {
     const validators = [
 
         validateLawyerStep1,
-
         validateLawyerStep2,
-
         validateLawyerStep3,
-
         validateLawyerStep4,
-
         validateLawyerStep5
 
     ];
@@ -524,6 +979,14 @@ function submitLawyerApplication() {
             return;
 
         }
+
+    }
+
+    if (!validateMembershipConfirmation()) {
+
+        showLawyerStep(5);
+
+        return;
 
     }
 
@@ -541,6 +1004,20 @@ function submitLawyerApplication() {
 
         acceptedRules: true,
 
+        membershipForm:
+
+            JSON.parse(
+                JSON.stringify(membershipForm)
+            ),
+
+        membershipConfirmation:
+
+            JSON.parse(
+                JSON.stringify(
+                    membershipConfirmation
+                )
+            ),
+
         verification:
             createLawyerVerification(),
 
@@ -554,7 +1031,9 @@ function submitLawyerApplication() {
     )) {
 
         alert(
+
             "ذخیره درخواست آزمایشی ناموفق بود."
+
         );
 
         return;
@@ -584,9 +1063,7 @@ function renderLawyerApplicationReceipt() {
     appendLawyerDetail(
 
         container,
-
         "نام متقاضی",
-
         lawyerApplication.name
 
     );
@@ -594,9 +1071,7 @@ function renderLawyerApplicationReceipt() {
     appendLawyerDetail(
 
         container,
-
         "کد رهگیری",
-
         lawyerApplication.trackingCode
 
     );
@@ -604,7 +1079,29 @@ function renderLawyerApplicationReceipt() {
     appendLawyerDetail(
 
         container,
+        "شماره فرم عضویت",
+        lawyerApplication.membershipForm.id
 
+    );
+
+    appendLawyerDetail(
+
+        container,
+        "تاریخ تأیید آزمایشی فرم",
+
+        new Date(
+
+            lawyerApplication
+            .membershipConfirmation
+            .confirmedAt
+
+        ).toLocaleString("fa-IR")
+
+    );
+
+    appendLawyerDetail(
+
+        container,
         "تاریخ ثبت درخواست",
 
         new Date(
@@ -616,7 +1113,6 @@ function renderLawyerApplicationReceipt() {
     appendLawyerDetail(
 
         container,
-
         "وضعیت درخواست",
 
         getLawyerVerificationTitle(
@@ -630,7 +1126,7 @@ function renderLawyerApplicationReceipt() {
 }
 
 
-// پیگیری وضعیت درخواست
+// پیگیری درخواست
 
 function checkApplication() {
 
@@ -640,7 +1136,9 @@ function checkApplication() {
     if (!lawyerApplication) {
 
         alert(
+
             "هنوز درخواست آزمایشی ثبت نشده است."
+
         );
 
         goLawyerAuthHome();
@@ -659,9 +1157,7 @@ function checkApplication() {
     appendLawyerDetail(
 
         container,
-
         "نام متقاضی",
-
         lawyerApplication.name
 
     );
@@ -669,9 +1165,7 @@ function checkApplication() {
     appendLawyerDetail(
 
         container,
-
         "کد رهگیری",
-
         lawyerApplication.trackingCode
 
     );
@@ -679,7 +1173,6 @@ function checkApplication() {
     appendLawyerDetail(
 
         container,
-
         "وضعیت احراز صلاحیت",
 
         getLawyerVerificationTitle(
@@ -693,7 +1186,20 @@ function checkApplication() {
     appendLawyerDetail(
 
         container,
+        "فرم عضویت",
 
+        lawyerApplication.membershipConfirmation
+            ?.confirmed
+
+            ? "تأیید آزمایشی شده"
+
+            : "ثبت نشده"
+
+    );
+
+    appendLawyerDetail(
+
+        container,
         "شرایط اولیه تیک آبی",
 
         lawyerApplication.blueTick.eligible
@@ -707,7 +1213,6 @@ function checkApplication() {
     appendLawyerDetail(
 
         container,
-
         "تیک آبی",
 
         hasLawyerBlueTick(lawyerApplication)
@@ -721,9 +1226,7 @@ function checkApplication() {
     appendLawyerDetail(
 
         container,
-
         "مجوز ارائه خدمات واقعی",
-
         "غیرفعال"
 
     );
@@ -749,7 +1252,9 @@ function loginLawyer() {
     if (phone !== "09000000000") {
 
         alert(
+
             "فقط شماره همراه آزمایشی مجاز است."
+
         );
 
         return;
@@ -759,7 +1264,9 @@ function loginLawyer() {
     if (!lawyerApplication) {
 
         alert(
+
             "ابتدا درخواست عضویت آزمایشی ثبت کنید."
+
         );
 
         return;
@@ -770,10 +1277,10 @@ function loginLawyer() {
 
 }
 
+
 function startLawyerOTP() {
 
     lawyerOTPExpiresAt =
-
         Date.now() + 120000;
 
     lawyerOTPAttempts = 0;
@@ -785,6 +1292,7 @@ function startLawyerOTP() {
     showLawyerPage("lawyerOTP");
 
 }
+
 
 function resendLawyerOTP() {
 
@@ -802,6 +1310,7 @@ function resendLawyerOTP() {
     alert("رمز آزمایشی: 123456");
 
 }
+
 
 function verifyLawyerOTP() {
 
@@ -874,7 +1383,9 @@ function verifyLawyerOTP() {
     } catch {
 
         alert(
+
             "ایجاد نشست آزمایشی ناموفق بود."
+
         );
 
         return;
@@ -909,16 +1420,27 @@ function getLawyerSession() {
         const application =
             getSavedLawyerApplication();
 
-        if (!application ||
+        if (
+
+            !application ||
+
             session.demo !== true ||
+
             session.role !== "lawyer" ||
+
             !Number.isFinite(session.expiresAt) ||
+
             Date.now() >= session.expiresAt ||
+
             session.trackingCode !==
-                application.trackingCode) {
+                application.trackingCode
+
+        ) {
 
             sessionStorage.removeItem(
+
                 LAWYER_SESSION_KEY
+
             );
 
             return null;
@@ -961,9 +1483,7 @@ function renderLawyerProfile() {
     appendLawyerDetail(
 
         container,
-
         "نام و نام خانوادگی",
-
         lawyerApplication.name
 
     );
@@ -971,9 +1491,7 @@ function renderLawyerProfile() {
     appendLawyerDetail(
 
         container,
-
         "شماره پروانه آزمایشی",
-
         lawyerApplication.licenseNumber
 
     );
@@ -981,7 +1499,6 @@ function renderLawyerProfile() {
     appendLawyerDetail(
 
         container,
-
         "مرجع صدور پروانه",
 
         LAWYER_AUTHORITIES[
@@ -993,7 +1510,6 @@ function renderLawyerProfile() {
     appendLawyerDetail(
 
         container,
-
         "وضعیت احراز صلاحیت",
 
         getLawyerVerificationTitle(
@@ -1007,9 +1523,7 @@ function renderLawyerProfile() {
     appendLawyerDetail(
 
         container,
-
         "کد رهگیری",
-
         lawyerApplication.trackingCode
 
     );
@@ -1017,7 +1531,20 @@ function renderLawyerProfile() {
     appendLawyerDetail(
 
         container,
+        "فرم عضویت",
 
+        lawyerApplication.membershipConfirmation
+            ?.confirmed
+
+            ? "تأیید آزمایشی شده"
+
+            : "ثبت نشده"
+
+    );
+
+    appendLawyerDetail(
+
+        container,
         "تیک آبی",
 
         hasLawyerBlueTick(lawyerApplication)
@@ -1038,7 +1565,9 @@ function renderLawyerProfile() {
 function logoutLawyer() {
 
     if (!confirm(
+
         "آیا از حساب کاربری خارج می‌شوید؟"
+
     )) return;
 
     sessionStorage.removeItem(
@@ -1069,6 +1598,33 @@ document.addEventListener(
     "DOMContentLoaded",
 
     () => {
+
+        const sections =
+            document.querySelectorAll(
+
+                "#step1, #step2, #step3, #step4"
+
+            );
+
+        sections.forEach(section => {
+
+            section.addEventListener(
+
+                "input",
+
+                invalidateMembershipConfirmation
+
+            );
+
+            section.addEventListener(
+
+                "change",
+
+                invalidateMembershipConfirmation
+
+            );
+
+        });
 
         lawyerApplication =
             getSavedLawyerApplication();
