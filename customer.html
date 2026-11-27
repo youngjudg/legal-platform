@@ -10,7 +10,7 @@ content="width=device-width, initial-scale=1">
 
 <title>پلتفرم اختصاصی مشتریان</title>
 
-<link rel="stylesheet" href="css/style.css?v=6.2">
+<link rel="stylesheet" href="css/style.css?v=7.1">
 
 </head>
 
@@ -29,59 +29,87 @@ content="width=device-width, initial-scale=1">
 <h2>به سامانه خدمات حقوقی خوش آمدید</h2>
 
 <p class="description">
+
 خدمات حقوقی آسان، سریع و تخصصی
+
 </p>
 
-<button onclick="comingSoon()">
-👤 ورود و ثبت‌نام
+<button class="primary" onclick="openAccount()">
+
+👤 ورود و ثبت‌نام | حساب کاربری
+
 </button>
 
 <button onclick="openServices()">
+
 💬 مشاوره حقوقی آنلاین
+
 </button>
 
 <button onclick="openServices()">
+
 🔍 جست‌وجو و انتخاب وکیل
+
 </button>
 
 <button onclick="comingSoon()">
+
 ⚖ درخواست وکالت پرونده
+
 </button>
 
 <button onclick="comingSoon()">
+
 📝 تنظیم دادخواست
+
 </button>
 
 <button onclick="comingSoon()">
+
 📝 تنظیم شکوائیه
+
 </button>
 
 <button onclick="comingSoon()">
+
 📄 تنظیم لایحه
+
 </button>
 
 <button onclick="comingSoon()">
+
 📄 تنظیم اظهارنامه
+
 </button>
 
 <button onclick="comingSoon()">
+
 🤖 دستیار هوشمند حقوقی
+
 </button>
 
 <button onclick="comingSoon()">
+
 📁 سوابق خدمات و مشاوره‌ها
+
 </button>
 
 <button onclick="comingSoon()">
+
 📌 پیگیری درخواست‌ها
+
 </button>
 
 <button onclick="comingSoon()">
+
 🎧 پشتیبانی
+
 </button>
 
 <button class="primary" onclick="goHome()">
+
 بازگشت به صفحه اصلی
+
 </button>
 
 </main>
@@ -92,22 +120,26 @@ content="width=device-width, initial-scale=1">
 
 <br>
 
-نسخه آزمایشی V6.2
+نسخه آزمایشی V7.1
 
 </footer>
 
+<script src="js/common.js?v=7.1"></script>
+
 <script>
 
-function comingSoon(){
-alert("این بخش در نسخه‌های بعدی فعال خواهد شد.");
+function openAccount() {
+
+    window.location.href =
+        "customer-auth.html?v=7.1";
+
 }
 
-function openServices(){
-window.location.href="consultation.html?v=6.2";
-}
+function openServices() {
 
-function goHome(){
-window.location.href="index.html?v=6.2";
+    window.location.href =
+        "consultation.html?v=7.1";
+
 }
 
 </script>
