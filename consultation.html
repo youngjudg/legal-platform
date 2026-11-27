@@ -1,51 +1,92 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
 <title>مشاوره حقوقی آنلاین</title>
-<link rel="stylesheet" href="css/style.css?v=6.3">
+
+<link rel="stylesheet" href="css/style.css?v=6.4">
+
 </head>
 
 <body>
 
 <header>
+
 <h1>⚖ مشاوره حقوقی آنلاین</h1>
+
 <p>ارتباط با وکلای متخصص</p>
+
 </header>
 
 <main>
 
 <section id="home" class="page active">
+
 <h2>خدمات مشاوره حقوقی</h2>
+
 <button class="primary" onclick="showPage('topics')">
 💬 شروع مشاوره حقوقی
 </button>
+
 <button onclick="showPage('topics')">
 🔍 جست‌وجو و انتخاب وکیل
 </button>
+
 <button onclick="goCustomer()">
 بازگشت به محیط مشتریان
 </button>
+
 </section>
+
 
 <section id="topics" class="page">
+
 <h2>انتخاب موضوع مشاوره</h2>
+
 <div id="topicList"></div>
-<button class="back" onclick="goCustomer()">بازگشت به محیط مشتریان</button>
+
+<button class="back" onclick="goCustomer()">
+بازگشت به محیط مشتریان
+</button>
+
 </section>
+
 
 <section id="types" class="page">
+
 <h2>انتخاب نوع مشاوره</h2>
+
 <p id="topicText" class="description"></p>
-<button onclick="selectType('متنی')">💬 مشاوره متنی</button>
-<button onclick="selectType('صوتی')">📞 مشاوره صوتی</button>
-<button onclick="selectType('تصویری')">📹 مشاوره تصویری</button>
-<button class="back" onclick="showPage('topics')">بازگشت</button>
+
+<button onclick="selectType('متنی')">
+💬 مشاوره متنی
+</button>
+
+<button onclick="selectType('صوتی')">
+📞 مشاوره صوتی
+</button>
+
+<button onclick="selectType('تصویری')">
+📹 مشاوره تصویری
+</button>
+
+<button class="back" onclick="showPage('topics')">
+بازگشت
+</button>
+
 </section>
 
+
 <section id="lawyers" class="page">
+
 <h2>انتخاب وکیل</h2>
+
 <div id="consultationSummary" class="summary"></div>
 
 <div class="notice">
@@ -53,65 +94,131 @@
 </div>
 
 <div class="filters">
+
 <strong>فیلتر و مرتب‌سازی وکلا</strong>
 
 <select id="sort" onchange="renderLawyers()">
-<option value="rating">بالاترین امتیاز</option>
-<option value="cheap">کمترین هزینه</option>
-<option value="expensive">بیشترین هزینه</option>
-<option value="experience">بیشترین سابقه</option>
+
+<option value="rating">
+بالاترین امتیاز
+</option>
+
+<option value="cheap">
+کمترین هزینه
+</option>
+
+<option value="expensive">
+بیشترین هزینه
+</option>
+
+<option value="experience">
+بیشترین سابقه
+</option>
+
 </select>
 
 <select id="status" onchange="renderLawyers()">
-<option value="all">تمام وضعیت‌ها</option>
-<option value="online">آماده مشاوره</option>
-<option value="busy">در حال مشاوره</option>
-<option value="offline">آفلاین</option>
+
+<option value="all">
+تمام وضعیت‌ها
+</option>
+
+<option value="online">
+آماده مشاوره
+</option>
+
+<option value="busy">
+در حال مشاوره
+</option>
+
+<option value="offline">
+آفلاین
+</option>
+
 </select>
 
 <select id="verified" onchange="renderLawyers()">
-<option value="all">تمام وکلا</option>
-<option value="yes">فقط وکلای ممتاز</option>
+
+<option value="all">
+تمام وکلا
+</option>
+
+<option value="yes">
+فقط وکلای ممتاز
+</option>
+
 </select>
 
 <select id="city" onchange="renderLawyers()">
+
 <option value="all">تمام شهرها</option>
+
 <option>تهران</option>
+
 <option>کرج</option>
+
 <option>شیراز</option>
+
 <option>مشهد</option>
+
 <option>اصفهان</option>
+
 </select>
+
 </div>
 
 <div id="lawyerList"></div>
-<button class="back" onclick="showPage('types')">بازگشت</button>
+
+<button class="back" onclick="showPage('types')">
+بازگشت
+</button>
+
 </section>
+
 
 <section id="profile" class="page">
+
 <h2>رزومه کامل وکیل</h2>
+
 <div id="profileContent"></div>
-<button class="back" onclick="showPage('lawyers')">بازگشت</button>
+
+<button class="back" onclick="showPage('lawyers')">
+بازگشت
+</button>
+
 </section>
 
+
 <section id="booking" class="page">
+
 <h2>انتخاب زمان مشاوره</h2>
+
 <div id="bookingSummary" class="summary"></div>
 
 <div id="instantOption">
+
 <button class="primary" onclick="instantBooking()">
 شروع مشاوره فوری
 </button>
+
 </div>
 
 <div class="card">
+
 <strong>رزرو نوبت مشاوره</strong>
 
-<label for="bookingDate">تاریخ:</label>
+<label for="bookingDate">
+تاریخ:
+</label>
+
 <input type="date" id="bookingDate">
 
-<label for="bookingTime">ساعت:</label>
+<label for="bookingTime">
+ساعت:
+</label>
+
 <select id="bookingTime">
+
 <option>09:00</option>
 <option>10:00</option>
 <option>11:00</option>
@@ -123,39 +230,76 @@
 <option>18:00</option>
 <option>19:00</option>
 <option>20:00</option>
+
 </select>
 
-<button onclick="reserveBooking()">تأیید زمان مشاوره</button>
+<button onclick="reserveBooking()">
+تأیید زمان مشاوره
+</button>
+
 </div>
 
-<div class="notice">تمام نوبت‌ها آزمایشی هستند.</div>
-<button class="back" onclick="showPage('lawyers')">تغییر وکیل</button>
+<div class="notice">
+تمام نوبت‌ها آزمایشی هستند.
+</div>
+
+<button class="back" onclick="showPage('lawyers')">
+تغییر وکیل
+</button>
+
 </section>
 
+
 <section id="invoice" class="page">
+
 <h2>صورتحساب مشاوره</h2>
+
 <div id="invoiceContent" class="summary"></div>
 
 <div class="card">
+
 <strong>شرایط مشاوره آزمایشی</strong>
-<p>هیچ خدمت حقوقی یا پرداخت واقعی انجام نمی‌شود.</p>
+
+<p>
+هیچ خدمت حقوقی یا پرداخت واقعی انجام نمی‌شود.
+</p>
 
 <label>
-<input type="checkbox" id="acceptRules" onchange="updatePayment()">
+
+<input type="checkbox"
+id="acceptRules"
+onchange="updatePayment()">
+
 شرایط را مطالعه کرده و می‌پذیرم.
+
 </label>
+
 </div>
 
-<button id="payButton" class="primary" disabled onclick="showPage('payment')">
+<button id="payButton"
+class="primary"
+disabled
+onclick="showPage('payment')">
+
 ادامه و پرداخت آزمایشی
+
 </button>
 
-<button onclick="showPage('booking')">تغییر زمان</button>
-<button class="danger" onclick="cancelRequest()">لغو درخواست</button>
+<button onclick="showPage('booking')">
+تغییر زمان
+</button>
+
+<button class="danger" onclick="cancelRequest()">
+لغو درخواست
+</button>
+
 </section>
 
+
 <section id="payment" class="page">
+
 <h2>درگاه پرداخت آزمایشی</h2>
+
 <div id="paymentAmount" class="summary"></div>
 
 <div class="notice">
@@ -170,27 +314,56 @@
 شبیه‌سازی پرداخت ناموفق
 </button>
 
-<button onclick="showPage('invoice')">بازگشت</button>
-</section>
-
-<section id="failed" class="page">
-<h2>پرداخت ناموفق</h2>
-<div class="notice">هیچ مبلغی کسر نشده است.</div>
-<button class="primary" onclick="showPage('payment')">تلاش مجدد</button>
-<button class="danger" onclick="cancelRequest()">لغو درخواست</button>
-</section>
-
-<section id="receipt" class="page">
-<h2>رسید ثبت درخواست</h2>
-<div class="success">✓ پرداخت آزمایشی موفق</div>
-<div id="receiptContent" class="summary"></div>
-
-<button class="primary" id="roomButton" onclick="enterRoom()">
-ورود به اتاق مشاوره
+<button onclick="showPage('invoice')">
+بازگشت
 </button>
 
-<button onclick="goCustomer()">بازگشت به محیط مشتریان</button>
 </section>
+
+
+<section id="failed" class="page">
+
+<h2>پرداخت ناموفق</h2>
+
+<div class="notice">
+هیچ مبلغی کسر نشده است.
+</div>
+
+<button class="primary" onclick="showPage('payment')">
+تلاش مجدد
+</button>
+
+<button class="danger" onclick="cancelRequest()">
+لغو درخواست
+</button>
+
+</section>
+
+
+<section id="receipt" class="page">
+
+<h2>رسید ثبت درخواست</h2>
+
+<div class="success">
+✓ پرداخت آزمایشی موفق
+</div>
+
+<div id="receiptContent" class="summary"></div>
+
+<button class="primary"
+id="roomButton"
+onclick="enterRoom()">
+
+ورود به اتاق مشاوره
+
+</button>
+
+<button onclick="goCustomer()">
+بازگشت به محیط مشتریان
+</button>
+
+</section>
+
 
 <section id="room" class="page">
 
@@ -199,89 +372,175 @@
 <div id="roomContent" class="summary"></div>
 
 <div class="timer">
-<small style="font-size:13px">زمان باقی‌مانده</small>
+
+<small style="font-size:13px">
+زمان باقی‌مانده
+</small>
+
 <br>
+
 <span id="timer">30:00</span>
+
 </div>
 
 <div id="timeWarning" class="notice" hidden>
+
 کمتر از پنج دقیقه تا پایان مشاوره باقی مانده است.
+
 </div>
 
 <div class="notice">
-🔒 محیط آزمایشی است. مدارک واقعی، اطلاعات شخصی و مستندات محرمانه ارسال نکنید.
+
+🔒 محیط آزمایشی است.
+مدارک واقعی، اطلاعات شخصی و مستندات محرمانه ارسال نکنید.
+
 </div>
 
-<div id="chatBox" class="chat" aria-live="polite"></div>
+<div id="chatBox"
+class="chat"
+aria-live="polite">
+</div>
 
-<textarea id="messageInput" placeholder="پیام آزمایشی خود را بنویسید..."></textarea>
+<textarea id="messageInput"
+maxlength="5000"
+placeholder="پیام آزمایشی خود را بنویسید...">
+</textarea>
 
-<button class="primary" id="sendButton" onclick="sendMessage()">
+<button class="primary"
+id="sendButton"
+onclick="sendMessage()">
+
 ارسال پیام
+
 </button>
 
-<input type="file" id="attachment" accept="image/*,.pdf" hidden style="display:none" onchange="sendAttachment()">
+<input type="file"
+id="attachment"
+accept="image/*,.pdf"
+hidden
+style="display:none"
+onchange="sendAttachment()">
 
-<button id="attachButton" onclick="document.getElementById('attachment').click()">
+<button id="attachButton"
+onclick="document.getElementById('attachment').click()">
+
 📎 پیوست تصویر یا PDF آزمایشی
+
 </button>
 
 <div class="actions">
-<button onclick="testCall('صوتی')">📞 تماس صوتی</button>
-<button onclick="testCall('تصویری')">📹 تماس تصویری</button>
+
+<button onclick="testCall('صوتی')">
+📞 تماس صوتی
+</button>
+
+<button onclick="testCall('تصویری')">
+📹 تماس تصویری
+</button>
+
 </div>
 
-<button onclick="showPage('extension')">⏳ تمدید مشاوره</button>
+<button onclick="showPage('extension')">
+⏳ تمدید مشاوره
+</button>
 
-<button class="danger" onclick="finishConsultation()">پایان مشاوره</button>
+<button class="danger" onclick="finishConsultation()">
+پایان مشاوره
+</button>
 
 </section>
 
+
 <section id="extension" class="page">
+
 <h2>تمدید زمان مشاوره</h2>
 
 <div class="notice">
+
 تمدید در این نسخه رایگان و آزمایشی است.
+
 </div>
 
-<button onclick="extendTime(15)">تمدید ۱۵ دقیقه</button>
-<button onclick="extendTime(30)">تمدید ۳۰ دقیقه</button>
-<button class="back" onclick="showPage('room')">بازگشت به مشاوره</button>
+<button onclick="extendTime(15)">
+تمدید ۱۵ دقیقه
+</button>
+
+<button onclick="extendTime(30)">
+تمدید ۳۰ دقیقه
+</button>
+
+<button class="back" onclick="showPage('room')">
+بازگشت به مشاوره
+</button>
+
 </section>
 
+
 <section id="review" class="page">
+
 <h2>ارزیابی مشاوره</h2>
-<div class="success">جلسه مشاوره پایان یافت.</div>
+
+<div class="success">
+جلسه مشاوره پایان یافت.
+</div>
 
 <div class="card">
 
-<p>از کیفیت مشاوره چقدر رضایت داشتید؟</p>
+<p>
+از کیفیت مشاوره چقدر رضایت داشتید؟
+</p>
 
 <div class="stars">
-<button aria-label="یک ستاره" onclick="setRating(1)">★</button>
-<button aria-label="دو ستاره" onclick="setRating(2)">★</button>
-<button aria-label="سه ستاره" onclick="setRating(3)">★</button>
-<button aria-label="چهار ستاره" onclick="setRating(4)">★</button>
-<button aria-label="پنج ستاره" onclick="setRating(5)">★</button>
+
+<button aria-label="یک ستاره"
+onclick="setRating(1)">★</button>
+
+<button aria-label="دو ستاره"
+onclick="setRating(2)">★</button>
+
+<button aria-label="سه ستاره"
+onclick="setRating(3)">★</button>
+
+<button aria-label="چهار ستاره"
+onclick="setRating(4)">★</button>
+
+<button aria-label="پنج ستاره"
+onclick="setRating(5)">★</button>
+
 </div>
 
 <p id="ratingText" class="description"></p>
 
-<textarea id="reviewText" maxlength="1000" placeholder="نظر آزمایشی شما درباره مشاوره..."></textarea>
+<textarea id="reviewText"
+maxlength="1000"
+placeholder="نظر آزمایشی شما درباره مشاوره...">
+</textarea>
 
-<button class="primary" onclick="submitReview()">ثبت امتیاز و نظر</button>
-<button onclick="goCustomer()">بازگشت بدون ثبت نظر</button>
+<button class="primary" onclick="submitReview()">
+ثبت امتیاز و نظر
+</button>
+
+<button onclick="goCustomer()">
+بازگشت بدون ثبت نظر
+</button>
 
 </div>
+
 </section>
 
+
 <section id="completed" class="page">
+
 <h2>پایان مشاوره</h2>
 
 <div class="success">
+
 ✓ ارزیابی آزمایشی ثبت شد.
+
 <br>
+
 از همراهی شما سپاسگزاریم.
+
 </div>
 
 <button class="primary" onclick="goCustomer()">
@@ -292,570 +551,38 @@
 
 </main>
 
+
 <footer>
+
 پلتفرم خدمات حقوقی
+
 <br>
+
 ماژول مشاوره حقوقی
+
 <br>
-نسخه آزمایشی V6.3
+
+نسخه آزمایشی V6.4
+
 </footer>
 
-<script>
 
-let topic="";
-let type="";
-let selectedLawyer=null;
-let booking="";
-let trackingCode="";
-let immediate=false;
-let timerInterval=null;
-let deadline=0;
-let sessionActive=false;
-let rating=0;
+<!-- اتصال ماژول‌های مستقل JavaScript -->
 
-const request={
-status:"",
-amount:0,
-commission:null,
-lawyerShare:null,
-refundAmount:0
-};
+<script src="js/data.js?v=6.4"></script>
 
-const topics=[
-"حقوقی و مدنی",
-"کیفری",
-"خانواده",
-"ملکی و ثبتی",
-"قراردادها",
-"کار و تأمین اجتماعی",
-"تجاری و شرکت‌ها",
-"چک و سفته",
-"اداری و شهرداری",
-"ارث و امور حسبی",
-"بین‌المللی و مهاجرت",
-"سایر موضوعات"
-];
+<script src="js/common.js?v=6.4"></script>
 
-const lawyers=[
-{
-id:1,name:"وکیل آزمایشی شماره ۱",
-city:"تهران",experience:12,
-degree:"دکتری حقوق",rating:4.9,
-cases:420,consultations:850,
-disciplinary:false,price:450000,status:"online",
-specialties:["کیفری","حقوقی و مدنی","چک و سفته"]
-},
-{
-id:2,name:"وکیل آزمایشی شماره ۲",
-city:"کرج",experience:8,
-degree:"کارشناسی ارشد حقوق",rating:4.8,
-cases:250,consultations:620,
-disciplinary:false,price:350000,status:"online",
-specialties:["خانواده","ارث و امور حسبی","حقوقی و مدنی"]
-},
-{
-id:3,name:"وکیل آزمایشی شماره ۳",
-city:"شیراز",experience:4,
-degree:"کارشناسی حقوق",rating:4.5,
-cases:90,consultations:180,
-disciplinary:false,price:220000,status:"offline",
-specialties:["ملکی و ثبتی","قراردادها","حقوقی و مدنی"]
-},
-{
-id:4,name:"وکیل آزمایشی شماره ۴",
-city:"مشهد",experience:15,
-degree:"دکتری حقوق",rating:4.9,
-cases:600,consultations:950,
-disciplinary:false,price:600000,status:"busy",
-specialties:["کیفری","اداری و شهرداری","کار و تأمین اجتماعی"]
-},
-{
-id:5,name:"وکیل آزمایشی شماره ۵",
-city:"اصفهان",experience:7,
-degree:"کارشناسی ارشد حقوق",rating:4.7,
-cases:190,consultations:410,
-disciplinary:false,price:300000,status:"online",
-specialties:["تجاری و شرکت‌ها","قراردادها","چک و سفته"]
-},
-{
-id:6,name:"وکیل آزمایشی شماره ۶",
-city:"تهران",experience:3,
-degree:"کارشناسی حقوق",rating:4.3,
-cases:60,consultations:120,
-disciplinary:false,price:180000,status:"offline",
-specialties:["بین‌المللی و مهاجرت","سایر موضوعات","خانواده"]
-}
-];
+<script src="js/consultation.js?v=6.4"></script>
 
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-window.scrollTo(0,0);
-}
+<script src="js/booking.js?v=6.4"></script>
 
-function goCustomer(){
-window.location.href="customer.html?v=6.3";
-}
+<script src="js/payment.js?v=6.4"></script>
 
-function isVerified(l){
-return l.experience>=5 &&
-["کارشناسی ارشد حقوق","دکتری حقوق"].includes(l.degree) &&
-l.cases>=150 && !l.disciplinary;
-}
+<script src="js/chat.js?v=6.4"></script>
 
-function money(n){
-return n.toLocaleString("fa-IR")+" تومان";
-}
-
-function getPrice(l){
-if(type==="صوتی")return l.price+100000;
-if(type==="تصویری")return l.price+200000;
-return l.price;
-}
-
-function statusText(l){
-if(l.status==="online")return '<span class="online">● آماده مشاوره</span>';
-if(l.status==="busy")return '<span class="busy">● در حال مشاوره</span>';
-return '<span class="offline">● آفلاین ـ امکان رزرو</span>';
-}
-
-topics.forEach(t=>{
-let b=document.createElement("button");
-b.textContent=t;
-b.onclick=()=>selectTopic(t);
-document.getElementById("topicList").appendChild(b);
-});
-
-function selectTopic(t){
-topic=t;
-document.getElementById("topicText").textContent="موضوع انتخاب‌شده: "+topic;
-showPage("types");
-}
-
-function selectType(t){
-type=t;
-document.getElementById("consultationSummary").textContent=
-"موضوع: "+topic+" | نوع مشاوره: "+type;
-renderLawyers();
-showPage("lawyers");
-}
-
-function renderLawyers(){
-
-let list=lawyers.filter(l=>l.specialties.includes(topic));
-
-let status=document.getElementById("status").value;
-let verified=document.getElementById("verified").value;
-let city=document.getElementById("city").value;
-let sort=document.getElementById("sort").value;
-
-if(status!=="all")list=list.filter(l=>l.status===status);
-if(verified==="yes")list=list.filter(isVerified);
-if(city!=="all")list=list.filter(l=>l.city===city);
-
-if(sort==="cheap")list.sort((a,b)=>getPrice(a)-getPrice(b));
-if(sort==="expensive")list.sort((a,b)=>getPrice(b)-getPrice(a));
-if(sort==="experience")list.sort((a,b)=>b.experience-a.experience);
-if(sort==="rating")list.sort((a,b)=>b.rating-a.rating);
-
-document.getElementById("lawyerList").innerHTML=list.map(l=>`
-<div class="card">
-<div class="avatar">⚖</div>
-<h3>${l.name} ${isVerified(l)?'<span class="blue">✔ ممتاز</span>':""}</h3>
-${statusText(l)}<br>
-📍 ${l.city}<br>
-سابقه: ${l.experience} سال<br>
-مدرک: ${l.degree}<br>
-تخصص: ${l.specialties.join("، ")}<br>
-<span class="rating">⭐ ${l.rating} از ۵</span><br>
-تعداد مشاوره: ${l.consultations}<br>
-مدت: ۳۰ دقیقه<br>
-<strong>تعرفه: ${money(getPrice(l))}</strong>
-<button onclick="showProfile(${l.id})">مشاهده رزومه کامل</button>
-<button class="primary" onclick="chooseLawyer(${l.id})">انتخاب وکیل</button>
-</div>
-`).join("")||'<p class="description">وکیلی مطابق فیلترها یافت نشد.</p>';
-
-}
-
-function showProfile(id){
-
-let l=lawyers.find(x=>x.id===id);
-
-document.getElementById("profileContent").innerHTML=`
-<div class="card">
-<div class="avatar">⚖</div>
-<h3>${l.name}</h3>
-<div class="notice">اطلاعات فرضی</div>
-${statusText(l)}<br>
-شماره پروانه: آزمایشی-${l.id}<br>
-محل فعالیت: ${l.city}<br>
-مدرک: ${l.degree}<br>
-سابقه: ${l.experience} سال<br>
-تعداد پرونده‌ها: ${l.cases}<br>
-تعداد مشاوره‌ها: ${l.consultations}<br>
-محکومیت انتظامی: ندارد (فرضی)<br>
-تخصص: ${l.specialties.join("، ")}<br>
-امتیاز: ${l.rating} از ۵<br>
-وکیل ممتاز: ${isVerified(l)?"بله":"خیر"}<br>
-تعرفه: ${money(getPrice(l))}
-<button class="primary" onclick="chooseLawyer(${l.id})">انتخاب این وکیل</button>
-</div>`;
-
-showPage("profile");
-}
-
-function chooseLawyer(id){
-
-clearInterval(timerInterval);
-sessionActive=false;
-
-selectedLawyer=lawyers.find(l=>l.id===id);
-request.status="در انتظار پرداخت";
-request.amount=getPrice(selectedLawyer);
-request.commission=null;
-request.lawyerShare=null;
-request.refundAmount=0;
-delete request.review;
-
-trackingCode="";
-booking="";
-immediate=false;
-
-document.getElementById("bookingSummary").innerHTML=`
-<strong>${selectedLawyer.name}</strong><br>
-${statusText(selectedLawyer)}<br>
-موضوع: ${topic}<br>
-نوع مشاوره: ${type}<br>
-هزینه: ${money(request.amount)}
-`;
-
-document.getElementById("instantOption").style.display=
-selectedLawyer.status==="online"?"block":"none";
-
-let now=new Date();
-let today=new Date(now.getTime()-now.getTimezoneOffset()*60000)
-.toISOString().slice(0,10);
-
-document.getElementById("bookingDate").min=today;
-document.getElementById("bookingDate").value=today;
-
-showPage("booking");
-}
-
-function instantBooking(){
-if(selectedLawyer.status!=="online")return;
-immediate=true;
-booking="مشاوره فوری";
-createInvoice();
-}
-
-function reserveBooking(){
-
-let date=document.getElementById("bookingDate").value;
-let time=document.getElementById("bookingTime").value;
-
-if(!date){
-alert("تاریخ مشاوره را انتخاب کنید.");
-return;
-}
-
-let appointment=new Date(date+"T"+time);
-
-if(appointment<=new Date()){
-alert("زمانی در آینده انتخاب کنید.");
-return;
-}
-
-immediate=false;
-booking=appointment.toLocaleDateString("fa-IR")+" ساعت "+time;
-createInvoice();
-}
-
-function createInvoice(){
-
-request.status="در انتظار پرداخت";
-
-document.getElementById("invoiceContent").innerHTML=`
-وکیل: ${selectedLawyer.name}<br>
-موضوع: ${topic}<br>
-نوع مشاوره: ${type}<br>
-زمان: ${booking}<br>
-مدت: ۳۰ دقیقه<br>
-<hr>
-<strong>مبلغ قابل پرداخت: ${money(request.amount)}</strong>
-`;
-
-document.getElementById("paymentAmount").textContent=
-"مبلغ آزمایشی: "+money(request.amount);
-
-document.getElementById("acceptRules").checked=false;
-updatePayment();
-showPage("invoice");
-}
-
-function updatePayment(){
-document.getElementById("payButton").disabled=
-!document.getElementById("acceptRules").checked;
-}
-
-function paymentSuccess(){
-
-if(!selectedLawyer || !booking ||
-!document.getElementById("acceptRules").checked ||
-trackingCode)return;
-
-trackingCode="TEST-"+Date.now().toString(36).toUpperCase();
-
-request.status=immediate?"پرداخت موفق":"رزرو شده";
-
-document.getElementById("receiptContent").innerHTML=`
-کد پیگیری: <strong dir="ltr">${trackingCode}</strong><br>
-وکیل: ${selectedLawyer.name}<br>
-موضوع: ${topic}<br>
-نوع مشاوره: ${type}<br>
-زمان: ${booking}<br>
-مدت: ۳۰ دقیقه<br>
-مبلغ آزمایشی: ${money(request.amount)}<br>
-وضعیت: ${request.status}
-`;
-
-document.getElementById("roomButton").disabled=!immediate;
-
-document.getElementById("roomButton").textContent=
-immediate?"ورود به اتاق مشاوره":"در انتظار زمان رزرو";
-
-showPage("receipt");
-}
-
-function paymentFailure(){
-request.status="پرداخت ناموفق";
-showPage("failed");
-}
-
-function cancelRequest(){
-
-if(confirm("آیا از لغو درخواست اطمینان دارید؟")){
-request.status="لغو شده";
-selectedLawyer=null;
-booking="";
-trackingCode="";
-request.amount=0;
-showPage("home");
-}
-
-}
-
-function enterRoom(){
-
-if(!immediate || !trackingCode)return;
-if(request.status==="تکمیل شده")return;
-
-if(sessionActive){
-showPage("room");
-return;
-}
-
-request.status="در حال مشاوره";
-
-document.getElementById("roomContent").innerHTML=`
-<strong>${selectedLawyer.name}</strong>
-${isVerified(selectedLawyer)?'<span class="blue">✔ ممتاز</span>':""}
-<br>
-تخصص: ${selectedLawyer.specialties.join("، ")}<br>
-موضوع: ${topic}<br>
-نوع مشاوره: ${type}<br>
-کد پیگیری: ${trackingCode}
-`;
-
-document.getElementById("chatBox").textContent="";
-document.getElementById("messageInput").value="";
-document.getElementById("messageInput").disabled=false;
-document.getElementById("sendButton").disabled=false;
-document.getElementById("attachButton").disabled=false;
-
-sessionActive=true;
-deadline=Date.now()+30*60*1000;
-
-addMessage("پاسخ خودکار آزمایشی: به اتاق مشاوره خوش آمدید.","lawyer");
-
-clearInterval(timerInterval);
-timerInterval=setInterval(updateTimer,1000);
-updateTimer();
-
-showPage("room");
-}
-
-function updateTimer(){
-
-if(!sessionActive)return;
-
-let remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));
-let minutes=Math.floor(remaining/60);
-let seconds=remaining%60;
-
-document.getElementById("timer").textContent=
-String(minutes).padStart(2,"0")+":"+
-String(seconds).padStart(2,"0");
-
-document.getElementById("timeWarning").hidden=remaining>300;
-
-if(remaining===0)endSession();
-
-}
-
-function addMessage(text,sender){
-
-let box=document.getElementById("chatBox");
-let message=document.createElement("div");
-
-message.className="message "+
-(sender==="user"?"userMessage":"lawyerMessage");
-
-let content=document.createElement("div");
-content.textContent=text;
-message.appendChild(content);
-
-let time=document.createElement("div");
-time.className="messageTime";
-
-time.textContent=new Date().toLocaleTimeString("fa-IR",{
-hour:"2-digit",minute:"2-digit"
-});
-
-message.appendChild(time);
-box.appendChild(message);
-box.scrollTop=box.scrollHeight;
-}
-
-function sendMessage(){
-
-if(!sessionActive || Date.now()>=deadline)return;
-
-let input=document.getElementById("messageInput");
-let text=input.value.trim();
-
-if(!text)return;
-
-addMessage(text,"user");
-input.value="";
-
-addMessage("پاسخ خودکار آزمایشی: پیام شما ثبت شد.","lawyer");
-
-}
-
-function sendAttachment(){
-
-let input=document.getElementById("attachment");
-let file=input.files[0];
-
-if(!sessionActive || Date.now()>=deadline || !file){
-input.value="";
-return;
-}
-
-if(!file.type.startsWith("image/") &&
-file.type!=="application/pdf" &&
-!file.name.toLowerCase().endsWith(".pdf")){
-alert("فقط تصویر یا PDF آزمایشی انتخاب کنید.");
-input.value="";
-return;
-}
-
-if(file.size>10*1024*1024){
-alert("حداکثر حجم فایل آزمایشی ۱۰ مگابایت است.");
-input.value="";
-return;
-}
-
-addMessage("📎 فایل انتخاب‌شده: "+file.name,"user");
-
-addMessage("فقط نام فایل نمایش داده شد. فایل به سرور ارسال نشده است.","lawyer");
-
-input.value="";
-}
-
-function testCall(callType){
-
-if(!sessionActive || Date.now()>=deadline)return;
-
-alert("تماس "+callType+" آزمایشی است و ارتباط واقعی برقرار نمی‌شود.");
-
-}
-
-function extendTime(minutes){
-
-if(!sessionActive || Date.now()>=deadline)return;
-
-deadline+=minutes*60*1000;
-
-addMessage("تمدید آزمایشی مشاوره به مدت "+minutes+" دقیقه.","lawyer");
-
-updateTimer();
-showPage("room");
-
-}
-
-function finishConsultation(){
-
-if(!sessionActive)return;
-
-if(confirm("آیا می‌خواهید مشاوره پایان یابد؟")){
-endSession();
-}
-
-}
-
-function endSession(){
-
-clearInterval(timerInterval);
-sessionActive=false;
-request.status="تکمیل شده";
-
-document.getElementById("messageInput").disabled=true;
-document.getElementById("sendButton").disabled=true;
-document.getElementById("attachButton").disabled=true;
-
-rating=0;
-setRating(0);
-document.getElementById("reviewText").value="";
-
-showPage("review");
-
-}
-
-function setRating(value){
-
-rating=value;
-
-document.querySelectorAll(".stars button").forEach((b,i)=>{
-b.classList.toggle("selected",i<value);
-});
-
-document.getElementById("ratingText").textContent=
-value?"امتیاز انتخاب‌شده: "+value+" از ۵":"";
-
-}
-
-function submitReview(){
-
-if(request.status!=="تکمیل شده")return;
-
-if(rating===0){
-alert("لطفاً امتیاز خود را انتخاب کنید.");
-return;
-}
-
-request.review={
-rating:rating,
-text:document.getElementById("reviewText").value
-};
-
-showPage("completed");
-
-}
-
-</script>
+<script src="js/review.js?v=6.4"></script>
 
 </body>
+
 </html>
