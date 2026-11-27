@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>ثبت‌نام و ورود مشتریان</title>
+
+<link rel="stylesheet" href="css/style.css?v=7.0">
+
+</head>
+
+<body>
+
+<header>
+
+<h1>⚖ پلتفرم خدمات حقوقی</h1>
+
+<p>حساب کاربری مشتریان</p>
+
+</header>
+
+<main>
+
+<div class="notice">
+این محیط آزمایشی است.
+از نام و شماره همراه واقعی استفاده نکنید.
+</div>
+
+<section id="home" class="page active">
+
+<h2>ورود یا ایجاد حساب کاربری</h2>
+
+<p class="description">
+برای استفاده از خدمات حقوقی،
+حساب کاربری خود را ایجاد کنید.
+</p>
+
+<button class="primary"
+onclick="showPage('register')">
+
+👤 ثبت‌نام مشتری جدید
+
+</button>
+
+<button onclick="showPage('login')">
+
+🔐 ورود به حساب کاربری
+
+</button>
+
+<button onclick="showPage('profile')">
+
+👤 مشاهده حساب کاربری
+
+</button>
+
+<button onclick="goCustomer()">
+
+بازگشت به محیط مشتریان
+
+</button>
+
+</section>
+
+
+<section id="register" class="page">
+
+<h2>ثبت‌نام مشتریان</h2>
+
+<div class="card">
+
+<label for="fullName">
+نام و نام خانوادگی
+</label>
+
+<input type="text"
+id="fullName"
+maxlength="80"
+placeholder="نام و نام خانوادگی آزمایشی">
+
+<label for="registerPhone">
+شماره تلفن همراه
+</label>
+
+<input type="tel"
+id="registerPhone"
+maxlength="11"
+inputmode="numeric"
+dir="ltr"
+placeholder="09000000000">
+
+<label>
+
+<input type="checkbox" id="acceptRules">
+
+قوانین و مقررات پلتفرم را می‌پذیرم.
+
+</label>
+
+<button onclick="showPage('rules')">
+
+مطالعه شرایط آزمایشی
+
+</button>
+
+<button class="primary" onclick="registerCustomer()">
+
+دریافت رمز یک‌بارمصرف آزمایشی
+
+</button>
+
+</div>
+
+<button onclick="showPage('home')">
+
+بازگشت
+
+</button>
+
+</section>
+
+
+<section id="login" class="page">
+
+<h2>ورود به حساب کاربری</h2>
+
+<div class="card">
+
+<label for="loginPhone">
+شماره تلفن همراه
+</label>
+
+<input type="tel"
+id="loginPhone"
+maxlength="11"
+inputmode="numeric"
+dir="ltr"
+placeholder="09000000000">
+
+<button class="primary" onclick="loginCustomer()">
+
+دریافت رمز یک‌بارمصرف آزمایشی
+
+</button>
+
+</div>
+
+<button onclick="showPage('home')">
+
+بازگشت
+
+</button>
+
+</section>
+
+
+<section id="otp" class="page">
+
+<h2>تأیید شماره تلفن همراه</h2>
+
+<div id="otpSummary" class="summary"></div>
+
+<div class="notice">
+
+رمز یک‌بارمصرف آزمایشی:
+
+<strong>123456</strong>
+
+<br>
+
+هیچ پیامک واقعی ارسال نمی‌شود.
+
+</div>
+
+<div class="card">
+
+<label for="otpCode">
+رمز شش‌رقمی
+</label>
+
+<input type="text"
+id="otpCode"
+maxlength="6"
+inputmode="numeric"
+dir="ltr"
+autocomplete="off"
+placeholder="رمز یک‌بارمصرف">
+
+<button class="primary" onclick="verifyOTP()">
+
+تأیید و ادامه
+
+</button>
+
+<button onclick="resendOTP()">
+
+ارسال مجدد رمز آزمایشی
+
+</button>
+
+</div>
+
+<button onclick="showPage('home')">
+
+انصراف
+
+</button>
+
+</section>
+
+
+<section id="profile" class="page">
+
+<h2>حساب کاربری مشتری</h2>
+
+<div id="profileContent" class="card">
+
+اطلاعات حساب کاربری آزمایشی
+
+</div>
+
+<button onclick="editProfile()">
+
+✏️ ویرایش اطلاعات کاربری
+
+</button>
+
+<button onclick="goCustomer()">
+
+⚖ ورود به محیط خدمات حقوقی
+
+</button>
+
+<button class="danger" onclick="logoutCustomer()">
+
+خروج از حساب کاربری
+
+</button>
+
+</section>
+
+
+<section id="editProfile" class="page">
+
+<h2>ویرایش اطلاعات کاربری</h2>
+
+<div class="card">
+
+<label for="editName">
+نام و نام خانوادگی
+</label>
+
+<input type="text"
+id="editName"
+maxlength="80">
+
+<button class="primary" onclick="saveProfile()">
+
+ذخیره تغییرات
+
+</button>
+
+</div>
+
+<button onclick="showPage('profile')">
+
+بازگشت
+
+</button>
+
+</section>
+
+
+<section id="rules" class="page">
+
+<h2>شرایط استفاده از نسخه آزمایشی</h2>
+
+<div class="card">
+
+<p>
+۱. این پلتفرم در مرحله طراحی و آزمایش است.
+</p>
+
+<p>
+۲. اطلاعات واقعی و محرمانه وارد نشود.
+</p>
+
+<p>
+۳. هیچ پرداخت یا خدمت حقوقی واقعی انجام نمی‌شود.
+</p>
+
+<p>
+۴. احراز هویت و ارسال پیامک شبیه‌سازی شده است.
+</p>
+
+<p>
+۵. این شرایط موقت بوده و جایگزین مقررات نهایی پلتفرم نیست.
+</p>
+
+</div>
+
+<button onclick="showPage('register')">
+
+بازگشت به ثبت‌نام
+
+</button>
+
+</section>
+
+</main>
+
+<footer>
+
+پلتفرم خدمات حقوقی
+
+<br>
+
+ماژول حساب کاربری مشتریان
+
+<br>
+
+نسخه آزمایشی V7.0
+
+</footer>
+
+<script src="js/common.js?v=7.0"></script>
+
+<script src="js/customer-auth.js?v=7.0"></script>
+
+</body>
+
+</html>
