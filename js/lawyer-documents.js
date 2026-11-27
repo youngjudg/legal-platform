@@ -1,5 +1,5 @@
 // ماژول مدیریت مدارک و مستندات وکلا
-// Version 8.0
+// Version 8.1
 
 const LAWYER_DOCUMENT_TYPES = {
 
@@ -27,14 +27,6 @@ const LAWYER_DOCUMENT_TYPES = {
 
     },
 
-    application: {
-
-        title: "فرم تقاضای ثبت‌نام",
-
-        statusId: "applicationDocumentStatus"
-
-    },
-
     video: {
 
         title: "تقاضای تصویری ثبت‌نام",
@@ -46,6 +38,9 @@ const LAWYER_DOCUMENT_TYPES = {
 };
 
 let lawyerDocuments = {};
+
+
+// ثبت آزمایشی مدارک
 
 function simulateDocument(type) {
 
@@ -87,6 +82,8 @@ function simulateDocument(type) {
 
     updateLawyerDocumentStatus(type);
 
+    invalidateMembershipConfirmation();
+
     alert(
 
         definition.title +
@@ -95,6 +92,9 @@ function simulateDocument(type) {
     );
 
 }
+
+
+// به‌روزرسانی وضعیت مدارک
 
 function updateLawyerDocumentStatus(type) {
 
@@ -129,6 +129,9 @@ function updateLawyerDocumentStatus(type) {
 
 }
 
+
+// حذف مدرک آزمایشی
+
 function removeLawyerDocument(type) {
 
     if (!LAWYER_DOCUMENT_TYPES[type]) return;
@@ -147,7 +150,12 @@ function removeLawyerDocument(type) {
 
     updateLawyerDocumentStatus(type);
 
+    invalidateMembershipConfirmation();
+
 }
+
+
+// تعیین مدارک الزامی
 
 function getRequiredLawyerDocuments() {
 
@@ -156,8 +164,6 @@ function getRequiredLawyerDocuments() {
         "license",
 
         "identity",
-
-        "application",
 
         "video"
 
@@ -181,6 +187,9 @@ function getRequiredLawyerDocuments() {
 
 }
 
+
+// تشخیص نقص مدارک
+
 function getMissingLawyerDocuments() {
 
     return getRequiredLawyerDocuments()
@@ -192,6 +201,9 @@ function getMissingLawyerDocuments() {
         );
 
 }
+
+
+// اعتبارسنجی مرحله چهارم
 
 function validateLawyerStep4() {
 
@@ -232,6 +244,9 @@ function validateLawyerStep4() {
 
 }
 
+
+// دریافت اطلاعات مدارک
+
 function getLawyerDocuments() {
 
     return JSON.parse(
@@ -239,6 +254,9 @@ function getLawyerDocuments() {
     );
 
 }
+
+
+// تهیه خلاصه وضعیت مدارک
 
 function getLawyerDocumentSummary() {
 
@@ -274,13 +292,18 @@ function getLawyerDocumentSummary() {
 
 }
 
+
+// محاسبه درصد تکمیل مدارک
+
 function getLawyerDocumentProgress() {
 
     const required =
         getRequiredLawyerDocuments();
 
     const completed = required.filter(
+
         type => Boolean(lawyerDocuments[type])
+
     ).length;
 
     return {
@@ -303,6 +326,61 @@ function getLawyerDocumentProgress() {
 
 }
 
+
+// لغو تأیید قبلی فرم در صورت تغییر مدارک
+
+function invalidateMembershipConfirmation() {
+
+    const checkbox =
+        document.getElementById(
+            "acceptMembershipForm"
+        );
+
+    if (checkbox) {
+
+        checkbox.checked = false;
+
+    }
+
+    const confirmation =
+        document.getElementById(
+            "confirmInformation"
+        );
+
+    if (confirmation) {
+
+        confirmation.checked = false;
+
+    }
+
+    const status =
+        document.getElementById(
+            "membershipConfirmationStatus"
+        );
+
+    if (status) {
+
+        status.textContent =
+            "⚪ فرم هنوز تأیید نشده است.";
+
+        status.style.color = "";
+
+    }
+
+    if (
+        typeof updateMembershipConfirmation
+        === "function"
+    ) {
+
+        updateMembershipConfirmation();
+
+    }
+
+}
+
+
+// بازنشانی مدارک
+
 function resetLawyerDocuments() {
 
     lawyerDocuments = {};
@@ -315,10 +393,17 @@ function resetLawyerDocuments() {
 
     });
 
+    invalidateMembershipConfirmation();
+
 }
 
+
+// راه‌اندازی اولیه
+
 document.addEventListener(
+
     "DOMContentLoaded",
+
     () => {
 
         Object.keys(
@@ -330,4 +415,5 @@ document.addEventListener(
         });
 
     }
+
 );
