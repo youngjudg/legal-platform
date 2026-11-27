@@ -44,6 +44,7 @@ cursor:pointer;
 
 button:hover{
 background:#e6eef5;
+color:#102a43;
 }
 
 .primary{
@@ -131,7 +132,7 @@ font-size:12px;
 🎧 پشتیبانی
 </button>
 
-<button class="primary" onclick="openServices()">
+<button class="primary" onclick="goHome()">
 بازگشت به صفحه اصلی
 </button>
 
@@ -140,7 +141,7 @@ font-size:12px;
 <footer>
 پلتفرم اختصاصی مشتریان
 <br><br>
-نسخه آزمایشی V6.0
+نسخه آزمایشی V6.1
 </footer>
 
 <script>
@@ -150,6 +151,10 @@ alert("این بخش در نسخه‌های بعدی فعال خواهد شد.")
 }
 
 function openServices(){
+window.location.href="consultation.html";
+}
+
+function goHome(){
 window.location.href="index.html";
 }
 
