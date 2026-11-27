@@ -4,25 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>پلتفرم خدمات حقوقی</title>
+
 <style>
 *{box-sizing:border-box}
+
 body{
 margin:0;
 font-family:Tahoma,sans-serif;
 background:#f4f6f9;
 color:#102a43;
 }
+
 header{
 background:#102a43;
 color:white;
 padding:30px 15px;
 text-align:center;
 }
+
 main{
 max-width:600px;
 margin:auto;
 padding:20px;
 }
+
 button{
 display:block;
 width:100%;
@@ -32,12 +37,51 @@ background:white;
 color:#102a43;
 border:1px solid #ddd;
 border-radius:12px;
+font-family:inherit;
 font-size:16px;
 cursor:pointer;
 }
+
 button:hover{
 background:#e6eef5;
 }
+
+h2{
+text-align:center;
+font-size:21px;
+}
+
+.description{
+text-align:center;
+color:#62788a;
+line-height:1.9;
+}
+
+.page{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+.back{
+background:#102a43;
+color:white;
+}
+
+.back:hover{
+background:#243f59;
+}
+
+.summary{
+background:white;
+padding:20px;
+border-radius:12px;
+line-height:2.2;
+border:1px solid #ddd;
+}
+
 footer{
 text-align:center;
 padding:20px;
@@ -45,6 +89,7 @@ color:#777;
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -53,7 +98,13 @@ color:#777;
 </header>
 
 <main>
-<button onclick="alert('به بخش مشاوره حقوقی آنلاین خوش آمدید')">مشاوره حقوقی آنلاین</button>
+
+<section id="home" class="page active">
+
+<button onclick="showPage('topics')">
+مشاوره حقوقی آنلاین
+</button>
+
 <button>جستجو و انتخاب وکیل</button>
 <button>درخواست وکالت پرونده</button>
 <button>تنظیم دادخواست و شکواییه</button>
@@ -61,11 +112,172 @@ color:#777;
 <button>پیگیری پرونده</button>
 <button>ورود و ثبت‌نام کاربران</button>
 <button>پنل اختصاصی وکلا</button>
+
+</section>
+
+<section id="topics" class="page">
+
+<h2>مشاوره حقوقی آنلاین</h2>
+
+<p class="description">
+موضوع مشاوره خود را انتخاب کنید.
+</p>
+
+<button onclick="selectTopic('حقوقی و مدنی')">
+حقوقی و مدنی
+</button>
+
+<button onclick="selectTopic('کیفری')">
+کیفری
+</button>
+
+<button onclick="selectTopic('خانواده')">
+خانواده
+</button>
+
+<button onclick="selectTopic('ملکی و ثبتی')">
+ملکی و ثبتی
+</button>
+
+<button onclick="selectTopic('قراردادها')">
+قراردادها
+</button>
+
+<button onclick="selectTopic('کار و تأمین اجتماعی')">
+کار و تأمین اجتماعی
+</button>
+
+<button onclick="selectTopic('تجاری و شرکت‌ها')">
+تجاری و شرکت‌ها
+</button>
+
+<button onclick="selectTopic('چک و سفته')">
+چک و سفته
+</button>
+
+<button onclick="selectTopic('اداری و شهرداری')">
+اداری و شهرداری
+</button>
+
+<button onclick="selectTopic('ارث و امور حسبی')">
+ارث و امور حسبی
+</button>
+
+<button onclick="selectTopic('بین‌المللی و مهاجرت')">
+بین‌المللی و مهاجرت
+</button>
+
+<button onclick="selectTopic('سایر موضوعات')">
+سایر موضوعات
+</button>
+
+<button class="back" onclick="showPage('home')">
+بازگشت به صفحه اصلی
+</button>
+
+</section>
+
+<section id="consultationType" class="page">
+
+<h2>انتخاب نوع مشاوره</h2>
+
+<p class="description" id="selectedTopic"></p>
+
+<button onclick="selectType('متنی')">
+💬 مشاوره متنی
+</button>
+
+<button onclick="selectType('صوتی')">
+📞 مشاوره صوتی
+</button>
+
+<button onclick="selectType('تصویری')">
+📹 مشاوره تصویری
+</button>
+
+<button class="back" onclick="showPage('topics')">
+بازگشت
+</button>
+
+</section>
+
+<section id="lawyers" class="page">
+
+<h2>انتخاب وکیل</h2>
+
+<div class="summary">
+موضوع مشاوره:
+<strong id="finalTopic"></strong>
+
+<br>
+
+نوع مشاوره:
+<strong id="finalType"></strong>
+</div>
+
+<p class="description">
+فهرست وکلای متخصص در نسخه بعدی
+به این قسمت اضافه خواهد شد.
+</p>
+
+<button class="back" onclick="showPage('consultationType')">
+بازگشت
+</button>
+
+<button onclick="showPage('home')">
+صفحه اصلی
+</button>
+
+</section>
+
 </main>
 
 <footer>
 تمام حقوق محفوظ است.
 </footer>
+
+<script>
+
+let topic = "";
+let consultationType = "";
+
+function showPage(pageId){
+
+document.querySelectorAll('.page').forEach(function(page){
+page.classList.remove('active');
+});
+
+document.getElementById(pageId).classList.add('active');
+
+window.scrollTo(0,0);
+
+}
+
+function selectTopic(value){
+
+topic = value;
+
+document.getElementById('selectedTopic').textContent =
+"موضوع انتخاب‌شده: " + topic;
+
+showPage('consultationType');
+
+}
+
+function selectType(value){
+
+consultationType = value;
+
+document.getElementById('finalTopic').textContent = topic;
+
+document.getElementById('finalType').textContent =
+consultationType;
+
+showPage('lawyers');
+
+}
+
+</script>
 
 </body>
 </html>
