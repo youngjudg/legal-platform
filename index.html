@@ -10,7 +10,7 @@
 body{margin:0;font-family:Tahoma,sans-serif;background:#f4f6f9;color:#102a43}
 header{background:#102a43;color:white;padding:30px 15px;text-align:center}
 main{max-width:650px;margin:auto;padding:20px}
-button,select,input[type=date]{
+button,select,input:not([type=checkbox]),textarea{
 display:block;width:100%;padding:15px;margin:10px 0;
 background:white;color:#102a43;border:1px solid #ddd;
 border-radius:12px;font-family:inherit;font-size:15px
@@ -28,8 +28,9 @@ background:white;border:1px solid #ddd;border-radius:15px;
 padding:18px;margin:15px 0;line-height:2
 }
 .avatar{
-width:65px;height:65px;border-radius:50%;background:#e6eef5;
-display:flex;align-items:center;justify-content:center;font-size:32px
+width:65px;height:65px;border-radius:50%;
+background:#e6eef5;display:flex;align-items:center;
+justify-content:center;font-size:32px
 }
 .blue{color:#1689ed}
 .online{color:green}
@@ -40,10 +41,40 @@ display:flex;align-items:center;justify-content:center;font-size:32px
 background:#fff3cd;color:#795900;padding:12px;
 border-radius:10px;font-size:13px;line-height:1.9;margin:12px 0
 }
-.success{background:#e5f7e9;color:#18753c;padding:18px;border-radius:12px;text-align:center}
+.success{
+background:#e5f7e9;color:#18753c;padding:18px;
+border-radius:12px;text-align:center
+}
 .danger{background:#b42318;color:white}
 label{line-height:2}
 footer{text-align:center;padding:20px;color:#777;font-size:12px}
+
+.timer{
+background:#102a43;color:white;text-align:center;
+padding:18px;border-radius:15px;font-size:26px;
+font-weight:bold
+}
+.chat{
+height:320px;overflow-y:auto;background:#e8eef4;
+border-radius:15px;padding:15px;margin:15px 0
+}
+.message{
+padding:12px;margin:10px 0;border-radius:12px;
+max-width:85%;line-height:1.8;overflow-wrap:anywhere;
+white-space:pre-wrap
+}
+.userMessage{background:#d6eadf;margin-left:auto}
+.lawyerMessage{background:white;margin-right:auto}
+.messageTime{font-size:10px;color:#777}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions button{flex:1;min-width:120px}
+.stars{display:flex;justify-content:center;gap:5px}
+.stars button{
+border:0;background:transparent;color:#aaa;
+font-size:35px;padding:5px;width:auto
+}
+.stars button.selected{color:#e8a400}
+textarea{resize:vertical;min-height:100px}
 </style>
 </head>
 
@@ -86,9 +117,8 @@ footer{text-align:center;padding:20px;color:#777;font-size:12px}
 <section id="lawyers" class="page">
 <h2>انتخاب وکیل</h2>
 <div id="consultationSummary" class="summary"></div>
-
 <div class="notice">
-تمام پروفایل‌ها، تعرفه‌ها و امتیازها آزمایشی هستند.
+تمام پروفایل‌ها، تعرفه‌ها و امتیازها فرضی هستند.
 </div>
 
 <div class="filters">
@@ -143,11 +173,10 @@ footer{text-align:center;padding:20px;color:#777;font-size:12px}
 
 <div class="card">
 <strong>رزرو نوبت مشاوره</strong>
-
-<label for="bookingDate">انتخاب تاریخ:</label>
+<label for="bookingDate">تاریخ:</label>
 <input type="date" id="bookingDate">
 
-<label for="bookingTime">انتخاب ساعت:</label>
+<label for="bookingTime">ساعت:</label>
 <select id="bookingTime">
 <option>09:00</option>
 <option>10:00</option>
@@ -166,7 +195,6 @@ footer{text-align:center;padding:20px;color:#777;font-size:12px}
 </div>
 
 <div class="notice">تمام نوبت‌ها فرضی هستند.</div>
-
 <button class="back" onclick="showPage('lawyers')">تغییر وکیل</button>
 </section>
 
@@ -176,65 +204,129 @@ footer{text-align:center;padding:20px;color:#777;font-size:12px}
 
 <div class="card">
 <strong>شرایط مشاوره آزمایشی</strong>
-<p>این نسخه صرفاً برای آزمایش امکانات پلتفرم است و هیچ خدمت حقوقی یا پرداخت واقعی انجام نمی‌شود.</p>
-
+<p>هیچ خدمت حقوقی یا پرداخت واقعی انجام نمی‌شود.</p>
 <label>
 <input type="checkbox" id="acceptRules" onchange="updatePayment()">
-شرایط فوق را مطالعه کرده و می‌پذیرم.
+شرایط را مطالعه کرده و می‌پذیرم.
 </label>
 </div>
 
 <button id="payButton" class="primary" disabled onclick="showPage('payment')">ادامه و پرداخت آزمایشی</button>
-
-<button onclick="showPage('booking')">تغییر زمان مشاوره</button>
+<button onclick="showPage('booking')">تغییر زمان</button>
 <button class="danger" onclick="cancelRequest()">لغو درخواست</button>
 </section>
 
 <section id="payment" class="page">
 <h2>درگاه پرداخت آزمایشی</h2>
 <div id="paymentAmount" class="summary"></div>
-
 <div class="notice">
-این صفحه درگاه بانکی واقعی نیست.
-هیچ اطلاعات بانکی وارد نکنید.
+هیچ اطلاعات بانکی واقعی وارد نکنید.
 </div>
-
 <button class="primary" onclick="paymentSuccess()">شبیه‌سازی پرداخت موفق</button>
 <button class="danger" onclick="paymentFailure()">شبیه‌سازی پرداخت ناموفق</button>
-<button onclick="showPage('invoice')">بازگشت به صورتحساب</button>
+<button onclick="showPage('invoice')">بازگشت</button>
 </section>
 
 <section id="failed" class="page">
 <h2>پرداخت ناموفق</h2>
-<div class="notice">پرداخت آزمایشی ناموفق بود. هیچ مبلغی کسر نشده است.</div>
+<div class="notice">هیچ مبلغی کسر نشده است.</div>
 <button class="primary" onclick="showPage('payment')">تلاش مجدد</button>
 <button class="danger" onclick="cancelRequest()">لغو درخواست</button>
 </section>
 
 <section id="receipt" class="page">
 <h2>رسید ثبت درخواست</h2>
-
-<div class="success">
-<h3>✓ پرداخت آزمایشی موفق</h3>
-درخواست مشاوره ثبت شد.
-</div>
-
+<div class="success">✓ پرداخت آزمایشی موفق</div>
 <div id="receiptContent" class="summary"></div>
-
 <button class="primary" id="roomButton" onclick="enterRoom()">ورود به اتاق مشاوره</button>
-
-<button onclick="showPage('home')">بازگشت به صفحه اصلی</button>
+<button onclick="showPage('home')">صفحه اصلی</button>
 </section>
 
 <section id="room" class="page">
+
 <h2>اتاق اختصاصی مشاوره</h2>
+
 <div id="roomContent" class="summary"></div>
 
-<div class="notice">
-ارتباط واقعی با وکیل و امکان ارسال مدارک در نسخه بعدی اضافه خواهد شد.
+<div class="timer">
+<small style="font-size:13px">زمان باقی‌مانده</small>
+<br>
+<span id="timer">30:00</span>
 </div>
 
-<button class="back" onclick="showPage('receipt')">بازگشت به رسید</button>
+<div id="timeWarning" class="notice" hidden>
+کمتر از پنج دقیقه تا پایان مشاوره باقی مانده است.
+</div>
+
+<div class="notice">
+🔒 محیط آزمایشی است. اطلاعات شخصی، مدارک واقعی و محرمانه ارسال نکنید. ارتباط واقعی با وکیل برقرار نیست.
+</div>
+
+<div id="chatBox" class="chat" aria-live="polite"></div>
+
+<textarea id="messageInput" placeholder="پیام آزمایشی خود را بنویسید..."></textarea>
+
+<button class="primary" id="sendButton" onclick="sendMessage()">ارسال پیام</button>
+
+<input type="file" id="attachment" accept="image/*,.pdf" hidden style="display:none" onchange="sendAttachment()">
+
+<button id="attachButton" onclick="document.getElementById('attachment').click()">
+📎 پیوست تصویر یا PDF آزمایشی
+</button>
+
+<div class="actions">
+<button onclick="testCall('صوتی')">📞 تماس صوتی</button>
+<button onclick="testCall('تصویری')">📹 تماس تصویری</button>
+</div>
+
+<button onclick="showPage('extension')">⏳ تمدید مشاوره</button>
+
+<button class="danger" onclick="finishConsultation()">پایان مشاوره</button>
+
+</section>
+
+<section id="extension" class="page">
+<h2>تمدید زمان مشاوره</h2>
+<div class="notice">
+تمدید در این نسخه رایگان و صرفاً آزمایشی است.
+</div>
+<button onclick="extendTime(15)">تمدید ۱۵ دقیقه</button>
+<button onclick="extendTime(30)">تمدید ۳۰ دقیقه</button>
+<button class="back" onclick="showPage('room')">بازگشت به مشاوره</button>
+</section>
+
+<section id="review" class="page">
+<h2>ارزیابی مشاوره</h2>
+<div class="success">جلسه مشاوره پایان یافت.</div>
+
+<div class="card">
+<p>از کیفیت مشاوره چقدر رضایت داشتید؟</p>
+
+<div class="stars">
+<button aria-label="یک ستاره" onclick="setRating(1)">★</button>
+<button aria-label="دو ستاره" onclick="setRating(2)">★</button>
+<button aria-label="سه ستاره" onclick="setRating(3)">★</button>
+<button aria-label="چهار ستاره" onclick="setRating(4)">★</button>
+<button aria-label="پنج ستاره" onclick="setRating(5)">★</button>
+</div>
+
+<p id="ratingText" class="description"></p>
+
+<textarea id="reviewText" maxlength="1000" placeholder="نظر آزمایشی شما درباره مشاوره..."></textarea>
+
+<button class="primary" onclick="submitReview()">ثبت امتیاز و نظر</button>
+<button onclick="showPage('home')">صفحه اصلی بدون ثبت نظر</button>
+</div>
+</section>
+
+<section id="completed" class="page">
+<h2>پایان مشاوره</h2>
+<div class="success">
+✓ ارزیابی آزمایشی ثبت شد.
+<br>
+از همراهی شما سپاسگزاریم.
+</div>
+<button class="primary" onclick="showPage('home')">بازگشت به صفحه اصلی</button>
 </section>
 
 </main>
@@ -242,7 +334,7 @@ footer{text-align:center;padding:20px;color:#777;font-size:12px}
 <footer>
 تمام حقوق محفوظ است.
 <br>
-نسخه آزمایشی V4.0
+نسخه آزمایشی V5.0
 </footer>
 
 <script>
@@ -253,6 +345,11 @@ let selectedLawyer=null;
 let booking="";
 let trackingCode="";
 let immediate=false;
+
+let timerInterval=null;
+let deadline=0;
+let sessionActive=false;
+let rating=0;
 
 const request={
 status:"",
@@ -415,7 +512,7 @@ ${statusText(l)}<br>
 <button onclick="showProfile(${l.id})">مشاهده رزومه کامل</button>
 <button class="primary" onclick="chooseLawyer(${l.id})">انتخاب وکیل</button>
 </div>
-`).join("")||'<p class="description">وکیلی مطابق فیلترهای انتخابی یافت نشد.</p>';
+`).join("")||'<p class="description">وکیلی مطابق فیلترها یافت نشد.</p>';
 }
 
 function showProfile(id){
@@ -447,8 +544,10 @@ showPage("profile");
 
 function chooseLawyer(id){
 
-selectedLawyer=lawyers.find(l=>l.id===id);
+clearInterval(timerInterval);
+sessionActive=false;
 
+selectedLawyer=lawyers.find(l=>l.id===id);
 request.status="در انتظار پرداخت";
 request.amount=getPrice(selectedLawyer);
 request.commission=null;
@@ -493,20 +592,19 @@ let date=document.getElementById("bookingDate").value;
 let time=document.getElementById("bookingTime").value;
 
 if(!date){
-alert("لطفاً تاریخ مشاوره را انتخاب کنید.");
+alert("تاریخ مشاوره را انتخاب کنید.");
 return;
 }
 
 let appointment=new Date(date+"T"+time);
 
 if(appointment<=new Date()){
-alert("لطفاً زمانی در آینده انتخاب کنید.");
+alert("زمانی در آینده انتخاب کنید.");
 return;
 }
 
 immediate=false;
 booking=appointment.toLocaleDateString("fa-IR")+" ساعت "+time;
-
 createInvoice();
 }
 
@@ -540,9 +638,8 @@ document.getElementById("payButton").disabled=
 function paymentSuccess(){
 
 if(!selectedLawyer || !booking ||
-!document.getElementById("acceptRules").checked)return;
-
-if(trackingCode)return;
+!document.getElementById("acceptRules").checked ||
+trackingCode)return;
 
 trackingCode="TEST-"+Date.now().toString(36).toUpperCase();
 
@@ -560,7 +657,6 @@ document.getElementById("receiptContent").innerHTML=`
 `;
 
 document.getElementById("roomButton").disabled=!immediate;
-
 document.getElementById("roomButton").textContent=
 immediate?"ورود به اتاق مشاوره":"در انتظار زمان رزرو";
 
@@ -579,7 +675,6 @@ selectedLawyer=null;
 booking="";
 trackingCode="";
 request.amount=0;
-alert("درخواست آزمایشی لغو شد.");
 showPage("home");
 }
 }
@@ -587,20 +682,206 @@ showPage("home");
 function enterRoom(){
 
 if(!immediate || !trackingCode)return;
+if(request.status==="تکمیل شده")return;
+
+if(sessionActive){
+showPage("room");
+return;
+}
 
 request.status="در حال مشاوره";
 
 document.getElementById("roomContent").innerHTML=`
-وکیل: ${selectedLawyer.name}<br>
+<strong>${selectedLawyer.name}</strong>
+${isVerified(selectedLawyer)?'<span class="blue">✔ ممتاز</span>':""}
+<br>
+تخصص: ${selectedLawyer.specialties.join("، ")}<br>
 موضوع: ${topic}<br>
 نوع مشاوره: ${type}<br>
-کد پیگیری: ${trackingCode}<br>
-وضعیت: اتاق مشاوره آزمایشی
+کد پیگیری: ${trackingCode}
 `;
+
+document.getElementById("chatBox").textContent="";
+document.getElementById("messageInput").value="";
+document.getElementById("messageInput").disabled=false;
+document.getElementById("sendButton").disabled=false;
+document.getElementById("attachButton").disabled=false;
+
+sessionActive=true;
+deadline=Date.now()+30*60*1000;
+
+addMessage("پاسخ خودکار آزمایشی: به اتاق مشاوره خوش آمدید. برای آزمایش، یک پیام غیرمحرمانه ارسال کنید.","lawyer");
+
+clearInterval(timerInterval);
+timerInterval=setInterval(updateTimer,1000);
+updateTimer();
 
 showPage("room");
 }
 
+function updateTimer(){
+
+if(!sessionActive)return;
+
+let remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+let minutes=Math.floor(remaining/60);
+let seconds=remaining%60;
+
+document.getElementById("timer").textContent=
+String(minutes).padStart(2,"0")+":"+
+String(seconds).padStart(2,"0");
+
+document.getElementById("timeWarning").hidden=remaining>300;
+
+if(remaining===0){
+endSession();
+}
+}
+
+function addMessage(text,sender){
+
+let box=document.getElementById("chatBox");
+let message=document.createElement("div");
+
+message.className="message "+
+(sender==="user"?"userMessage":"lawyerMessage");
+
+let content=document.createElement("div");
+content.textContent=text;
+message.appendChild(content);
+
+let time=document.createElement("div");
+time.className="messageTime";
+time.textContent=new Date().toLocaleTimeString("fa-IR",{
+hour:"2-digit",minute:"2-digit"
+});
+
+message.appendChild(time);
+box.appendChild(message);
+box.scrollTop=box.scrollHeight;
+}
+
+function sendMessage(){
+
+if(!sessionActive || Date.now()>=deadline)return;
+
+let input=document.getElementById("messageInput");
+let text=input.value.trim();
+
+if(!text)return;
+
+addMessage(text,"user");
+input.value="";
+
+addMessage("پاسخ خودکار آزمایشی: پیام شما در محیط نمایشی ثبت شد.","lawyer");
+}
+
+function sendAttachment(){
+
+let input=document.getElementById("attachment");
+let file=input.files[0];
+
+if(!sessionActive || Date.now()>=deadline || !file){
+input.value="";
+return;
+}
+
+if(!file.type.startsWith("image/") &&
+file.type!=="application/pdf" &&
+!file.name.toLowerCase().endsWith(".pdf")){
+alert("فقط تصویر یا PDF آزمایشی انتخاب کنید.");
+input.value="";
+return;
+}
+
+if(file.size>10*1024*1024){
+alert("حداکثر حجم فایل آزمایشی ۱۰ مگابایت است.");
+input.value="";
+return;
+}
+
+addMessage("📎 فایل انتخاب‌شده: "+file.name,"user");
+
+addMessage("فقط نام فایل نمایش داده شد. فایل به هیچ سروری ارسال نشده است.","lawyer");
+
+input.value="";
+}
+
+function testCall(callType){
+
+if(!sessionActive)return;
+
+alert("تماس "+callType+" آزمایشی است و ارتباط واقعی برقرار نمی‌شود.");
+}
+
+function extendTime(minutes){
+
+if(!sessionActive || Date.now()>=deadline)return;
+
+deadline+=minutes*60*1000;
+
+addMessage("تمدید آزمایشی مشاوره به مدت "+minutes+" دقیقه.","lawyer");
+
+updateTimer();
+showPage("room");
+}
+
+function finishConsultation(){
+
+if(!sessionActive)return;
+
+if(confirm("آیا می‌خواهید مشاوره پایان یابد؟")){
+endSession();
+}
+}
+
+function endSession(){
+
+clearInterval(timerInterval);
+sessionActive=false;
+request.status="تکمیل شده";
+
+document.getElementById("messageInput").disabled=true;
+document.getElementById("sendButton").disabled=true;
+document.getElementById("attachButton").disabled=true;
+
+rating=0;
+setRating(0);
+document.getElementById("reviewText").value="";
+
+showPage("review");
+}
+
+function setRating(value){
+
+rating=value;
+
+document.querySelectorAll(".stars button").forEach((b,i)=>{
+b.classList.toggle("selected",i<value);
+});
+
+document.getElementById("ratingText").textContent=
+value?"امتیاز انتخاب‌شده: "+value+" از ۵":"";
+}
+
+function submitReview(){
+
+if(request.status!=="تکمیل شده")return;
+
+if(rating===0){
+alert("لطفاً امتیاز خود را انتخاب کنید.");
+return;
+}
+
+request.review={
+rating:rating,
+text:document.getElementById("reviewText").value
+};
+
+showPage("completed");
+}
+
 </script>
+
 </body>
 </html>
