@@ -1,5 +1,5 @@
-// ماژول اصلی ثبت‌نام و ورود وکلا
-// Version 8.1
+// ماژول ثبت‌نام و ورود وکلا
+// Version 8.2
 
 const LAWYER_APPLICATION_KEY =
     "legal_platform_demo_lawyer_application";
@@ -291,7 +291,8 @@ function appendLawyerDetail(
 
     const row = document.createElement("p");
 
-    row.textContent = title + ": " + value;
+    row.textContent =
+        title + ": " + (value ?? "");
 
     container.appendChild(row);
 
@@ -322,6 +323,7 @@ function renderLawyerRegistrationSummary() {
         ["شماره پروانه", data.licenseNumber],
 
         ["مرجع صدور پروانه",
+
             LAWYER_AUTHORITIES[
                 data.licenseAuthority
             ]],
@@ -339,6 +341,7 @@ function renderLawyerRegistrationSummary() {
             data.experience + " سال"],
 
         ["مدرک تحصیلی",
+
             LAWYER_DEGREE_TITLES[data.degree]],
 
         ["دانشگاه", data.university],
@@ -348,11 +351,13 @@ function renderLawyerRegistrationSummary() {
         ["تعداد پرونده‌ها", data.caseCount],
 
         ["محکومیت انتظامی",
+
             data.disciplinaryHistory === "no"
                 ? "ندارد"
                 : "دارد"],
 
         ["حوزه‌های تخصصی",
+
             data.specialties.join("، ")],
 
         ["خدمات قابل ارائه",
@@ -417,7 +422,7 @@ function generateMembershipFormId() {
 }
 
 
-// تولید خودکار فرم درخواست عضویت
+// تولید خودکار فرم عضویت
 
 function createMembershipForm(data) {
 
@@ -498,6 +503,7 @@ function createMembershipForm(data) {
         "نسخه فرم: " + MEMBERSHIP_FORM_VERSION,
 
         "تاریخ تولید فرم: " +
+
         new Date(createdAt)
         .toLocaleString("fa-IR")
 
@@ -578,7 +584,7 @@ function renderMembershipForm() {
 }
 
 
-// تأیید الکترونیکی آزمایشی فرم
+// تأیید الکترونیکی آزمایشی
 
 function updateMembershipConfirmation() {
 
@@ -696,14 +702,15 @@ function validateMembershipConfirmation() {
 }
 
 
-// دریافت نسخه متنی فرم
+// اتصال به ماژول طراحی PDF
 
 function exportMembershipForm(
     form,
     confirmation
 ) {
 
-    if (!form || !Array.isArray(form.paragraphs)) {
+    if (!form ||
+        !Array.isArray(form.paragraphs)) {
 
         alert("فرم درخواست عضویت موجود نیست.");
 
@@ -711,87 +718,32 @@ function exportMembershipForm(
 
     }
 
-    const lines = [
+    if (
+        typeof printMembershipPDF !== "function"
+    ) {
 
-        form.title,
+        alert(
 
-        "نسخه آزمایشی ـ فاقد اعتبار قراردادی",
-
-        "",
-
-        ...form.paragraphs,
-
-        ""
-
-    ];
-
-    if (confirmation &&
-        confirmation.confirmed === true) {
-
-        lines.push(
-
-            "وضعیت: تأیید آزمایشی شده",
-
-            "تاریخ تأیید: " +
-
-            new Date(
-                confirmation.confirmedAt
-            ).toLocaleString("fa-IR"),
-
-            "روش تأیید: انتخاب گزینه تأیید آزمایشی"
+            "ماژول PDF بارگذاری نشده است. لطفاً صفحه را دوباره بارگذاری کنید."
 
         );
 
-    } else {
-
-        lines.push(
-
-            "وضعیت: پیش‌نویس تأییدنشده"
-
-        );
+        return;
 
     }
 
-    lines.push(
+    printMembershipPDF(
 
-        "",
+        form,
 
-        "این سند امضای الکترونیکی معتبر ندارد."
-
-    );
-
-    const blob = new Blob(
-
-        ["\uFEFF" + lines.join("\n\n")],
-
-        {type: "text/plain;charset=utf-8"}
-
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-
-    link.href = url;
-
-    link.download = form.id + ".txt";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    setTimeout(
-
-        () => URL.revokeObjectURL(url),
-
-        3000
+        confirmation
 
     );
 
 }
 
+
+// مشاهده و ذخیره پیش‌نویس فرم
 
 function downloadMembershipForm() {
 
@@ -807,6 +759,8 @@ function downloadMembershipForm() {
 
 }
 
+
+// مشاهده و ذخیره فرم ثبت‌شده
 
 function downloadSavedMembershipForm() {
 
@@ -942,7 +896,7 @@ function getSavedLawyerApplication() {
 }
 
 
-// ارسال نهایی درخواست عضویت
+// ارسال نهایی درخواست
 
 function submitLawyerApplication() {
 
