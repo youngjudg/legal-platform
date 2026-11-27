@@ -10,7 +10,7 @@ content="width=device-width, initial-scale=1">
 
 <title>ثبت‌نام و ورود وکلا</title>
 
-<link rel="stylesheet" href="css/style.css?v=8.1">
+<link rel="stylesheet" href="css/style.css?v=8.2">
 
 <style>
 
@@ -76,6 +76,7 @@ content="width=device-width, initial-scale=1">
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 18px;
+    font-size: 16px;
     line-height: 2;
     text-align: right;
     overflow-wrap: anywhere;
@@ -83,10 +84,12 @@ content="width=device-width, initial-scale=1">
 
 .membershipForm h3 {
     text-align: center;
+    font-size: 20px;
+    color: #183153;
 }
 
 .formVersion {
-    font-size: 12px;
+    font-size: 13px;
     color: #777;
     text-align: center;
 }
@@ -805,7 +808,7 @@ class="membershipForm">
 
 <button onclick="downloadMembershipForm()">
 
-📥 دریافت نسخه فرم درخواست عضویت
+📥 مشاهده و ذخیره فرم عضویت
 
 </button>
 
@@ -960,7 +963,7 @@ onclick="submitLawyerApplication()">
 
 <button onclick="downloadSavedMembershipForm()">
 
-📄 دریافت فرم درخواست عضویت ثبت‌شده
+📄 مشاهده و ذخیره فرم عضویت ثبت‌شده
 
 </button>
 
@@ -1113,7 +1116,7 @@ class="card">
 
 <button onclick="downloadSavedMembershipForm()">
 
-📄 فرم درخواست عضویت و همکاری
+📄 مشاهده و ذخیره فرم درخواست عضویت
 
 </button>
 
@@ -1152,7 +1155,7 @@ onclick="logoutLawyer()">
 
 <br>
 
-نسخه آزمایشی V8.1
+نسخه آزمایشی V8.2
 
 </footer>
 
@@ -1164,7 +1167,9 @@ onclick="logoutLawyer()">
 
 <script src="js/lawyer-verification.js?v=8.0"></script>
 
-<script src="js/lawyer-auth.js?v=8.1"></script>
+<script src="js/lawyer-pdf.js?v=8.2"></script>
+
+<script src="js/lawyer-auth.js?v=8.2"></script>
 
 </body>
 
