@@ -10,7 +10,7 @@ content="width=device-width, initial-scale=1">
 
 <title>پلتفرم اختصاصی مشتریان</title>
 
-<link rel="stylesheet" href="css/style.css?v=7.1">
+<link rel="stylesheet" href="css/style.css?v=7.3">
 
 </head>
 
@@ -26,7 +26,11 @@ content="width=device-width, initial-scale=1">
 
 <main>
 
-<h2>به سامانه خدمات حقوقی خوش آمدید</h2>
+<h2 id="welcomeTitle">
+
+به سامانه خدمات حقوقی خوش آمدید
+
+</h2>
 
 <p class="description">
 
@@ -34,11 +38,36 @@ content="width=device-width, initial-scale=1">
 
 </p>
 
-<button class="primary" onclick="openAccount()">
+<div class="card">
 
-👤 ورود و ثبت‌نام | حساب کاربری
+<p id="accountStatus">
+
+⚪ وضعیت حساب: مهمان
+
+</p>
+
+<p id="customerName"></p>
+
+<button id="accountButton"
+class="primary"
+onclick="openAccount()">
+
+👤 ورود و ثبت‌نام
 
 </button>
+
+<button id="logoutButton"
+class="danger"
+style="display:none"
+onclick="logoutFromCustomer()">
+
+خروج از حساب کاربری
+
+</button>
+
+</div>
+
+<h2>خدمات حقوقی</h2>
 
 <button onclick="openServices()">
 
@@ -120,27 +149,113 @@ content="width=device-width, initial-scale=1">
 
 <br>
 
-نسخه آزمایشی V7.1
+نسخه آزمایشی V7.3
 
 </footer>
 
-<script src="js/common.js?v=7.1"></script>
+<script src="js/common.js?v=7.3"></script>
+
+<script src="js/session.js?v=7.3"></script>
 
 <script>
 
 function openAccount() {
 
     window.location.href =
-        "customer-auth.html?v=7.1";
+        "customer-auth.html?v=7.3";
 
 }
 
 function openServices() {
 
     window.location.href =
-        "consultation.html?v=7.1";
+        "consultation.html?v=7.3";
 
 }
+
+function updateCustomerPanel() {
+
+    const customer = getCurrentCustomer();
+
+    const title =
+        document.getElementById("welcomeTitle");
+
+    const status =
+        document.getElementById("accountStatus");
+
+    const name =
+        document.getElementById("customerName");
+
+    const accountButton =
+        document.getElementById("accountButton");
+
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+    if (customer) {
+
+        title.textContent =
+            customer.name + "، خوش آمدید";
+
+        status.textContent =
+            "🟢 وضعیت حساب: فعال ـ آزمایشی";
+
+        name.textContent =
+            "نام مشتری: " + customer.name;
+
+        accountButton.textContent =
+            "👤 مدیریت حساب کاربری";
+
+        logoutButton.style.display = "block";
+
+    } else {
+
+        title.textContent =
+            "به سامانه خدمات حقوقی خوش آمدید";
+
+        status.textContent =
+            "⚪ وضعیت حساب: مهمان";
+
+        name.textContent = "";
+
+        accountButton.textContent =
+            "👤 ورود و ثبت‌نام";
+
+        logoutButton.style.display = "none";
+
+    }
+
+}
+
+function logoutFromCustomer() {
+
+    if (!confirm(
+        "آیا می‌خواهید از حساب کاربری خارج شوید؟"
+    )) {
+
+        return;
+
+    }
+
+    clearSession();
+
+    updateCustomerPanel();
+
+    alert("با موفقیت از حساب کاربری خارج شدید.");
+
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    updateCustomerPanel
+);
+
+window.addEventListener(
+    "pageshow",
+    updateCustomerPanel
+);
+
+setInterval(updateCustomerPanel, 30000);
 
 </script>
 
