@@ -1,5 +1,5 @@
 // ماژول ثبت‌نام و ورود مشتریان
-// Version 7.0
+// Version 7.2
 
 const DEMO_OTP = "123456";
 
@@ -13,8 +13,10 @@ let otpAttempts = 0;
 function normalizeDigits(value) {
 
     return value
-        .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
-        .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+        .replace(/[۰-۹]/g, d =>
+            "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+        .replace(/[٠-٩]/g, d =>
+            "٠١٢٣٤٥٦٧٨٩".indexOf(d))
         .trim();
 
 }
@@ -49,7 +51,7 @@ function registerCustomer() {
 
     if (!validName(name)) {
 
-        alert("لطفاً نام و نام خانوادگی آزمایشی معتبر وارد کنید.");
+        alert("لطفاً نام آزمایشی معتبر وارد کنید.");
 
         return;
 
@@ -65,7 +67,7 @@ function registerCustomer() {
 
     if (phone !== "09000000000") {
 
-        alert("در نسخه آزمایشی فقط از شماره 09000000000 استفاده کنید.");
+        alert("فقط از شماره آزمایشی 09000000000 استفاده کنید.");
 
         return;
 
@@ -78,6 +80,8 @@ function registerCustomer() {
         return;
 
     }
+
+    registeredCustomer = getSavedCustomer();
 
     if (registeredCustomer &&
         registeredCustomer.phone === phone) {
@@ -124,6 +128,8 @@ function loginCustomer() {
 
     }
 
+    registeredCustomer = getSavedCustomer();
+
     if (!registeredCustomer ||
         registeredCustomer.phone !== phone) {
 
@@ -169,7 +175,7 @@ function verifyOTP() {
 
     if (Date.now() >= otpExpiresAt) {
 
-        alert("اعتبار رمز پایان یافته است. رمز جدید دریافت کنید.");
+        alert("اعتبار رمز پایان یافته است.");
 
         return;
 
@@ -177,7 +183,7 @@ function verifyOTP() {
 
     if (otpAttempts >= 5) {
 
-        alert("تعداد تلاش‌ها بیش از حد مجاز است. رمز جدید دریافت کنید.");
+        alert("لطفاً رمز جدید دریافت کنید.");
 
         return;
 
@@ -212,6 +218,24 @@ function verifyOTP() {
     currentCustomer.lastLogin =
         new Date().toISOString();
 
+    try {
+
+        if (!createSession(currentCustomer)) {
+
+            alert("ایجاد نشست آزمایشی ناموفق بود.");
+
+            return;
+
+        }
+
+    } catch {
+
+        alert("مرورگر امکان ذخیره نشست را فراهم نمی‌کند.");
+
+        return;
+
+    }
+
     pendingCustomer = null;
 
     authMode = "";
@@ -238,11 +262,13 @@ function resendOTP() {
 
     startOTP();
 
-    alert("رمز آزمایشی مجدداً صادر شد: 123456");
+    alert("رمز آزمایشی جدید: 123456");
 
 }
 
 function renderProfile() {
+
+    currentCustomer = getCurrentCustomer();
 
     if (!currentCustomer) {
 
@@ -261,15 +287,20 @@ function renderProfile() {
 
     const details = [
 
-        ["نام و نام خانوادگی", currentCustomer.name],
+        ["نام و نام خانوادگی",
+            currentCustomer.name],
 
-        ["شماره همراه", currentCustomer.phone],
+        ["شماره همراه",
+            currentCustomer.phone],
 
-        ["شناسه مشتری", currentCustomer.id],
+        ["شناسه مشتری",
+            currentCustomer.id],
 
-        ["وضعیت حساب", "فعال ـ آزمایشی"],
+        ["وضعیت حساب",
+            "فعال ـ آزمایشی"],
 
-        ["تأیید شماره همراه", "شبیه‌سازی شده"],
+        ["تأیید شماره همراه",
+            "شبیه‌سازی شده"],
 
         ["تاریخ عضویت",
             new Date(currentCustomer.createdAt)
@@ -285,7 +316,8 @@ function renderProfile() {
 
         const row = document.createElement("p");
 
-        row.textContent = item[0] + ": " + item[1];
+        row.textContent =
+            item[0] + ": " + item[1];
 
         container.appendChild(row);
 
@@ -296,6 +328,8 @@ function renderProfile() {
 }
 
 function editProfile() {
+
+    currentCustomer = getCurrentCustomer();
 
     if (!currentCustomer) {
 
@@ -313,6 +347,8 @@ function editProfile() {
 }
 
 function saveProfile() {
+
+    currentCustomer = getCurrentCustomer();
 
     if (!currentCustomer) {
 
@@ -336,6 +372,24 @@ function saveProfile() {
 
     currentCustomer.name = name;
 
+    try {
+
+        if (!saveCustomer(currentCustomer)) {
+
+            alert("ذخیره تغییرات ناموفق بود.");
+
+            return;
+
+        }
+
+    } catch {
+
+        alert("ذخیره اطلاعات آزمایشی امکان‌پذیر نیست.");
+
+        return;
+
+    }
+
     alert("تغییرات آزمایشی ذخیره شد.");
 
     renderProfile();
@@ -344,19 +398,13 @@ function saveProfile() {
 
 function logoutCustomer() {
 
-    if (!currentCustomer) {
-
-        showPage("home");
-
-        return;
-
-    }
-
     if (!confirm("آیا می‌خواهید از حساب کاربری خارج شوید؟")) {
 
         return;
 
     }
+
+    clearSession();
 
     currentCustomer = null;
 
@@ -383,6 +431,10 @@ function logoutCustomer() {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    registeredCustomer = getSavedCustomer();
+
+    currentCustomer = getCurrentCustomer();
+
     const profileButton = document.querySelector(
         '#home button[onclick="showPage(\'profile\')"]'
     );
@@ -390,6 +442,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (profileButton) {
 
         profileButton.onclick = renderProfile;
+
+    }
+
+    if (currentCustomer) {
+
+        renderProfile();
 
     }
 
